@@ -36,7 +36,7 @@ ws.on("connection", (socket) => {
 
                     try {
                         const decrypted = keypair.privateKey.decrypt(message);
-                        socket.send(`${decrypted};;A`);
+                        socket.send(`${decrypted}`);
                     }
                     catch (err) {
                         socket.send(`ERR;;CLIENT;;Invalid message.`);
