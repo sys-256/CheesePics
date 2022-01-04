@@ -12,6 +12,12 @@ const ws = new WebSocket.Server({ port: config.port.websocket }, () => {
     console.log(`Listening for WebSocket connections on port ${config.port.websocket}`);
 });
 
+// Declare variables to avoid try/catch hell
+let decrypted;
+let decrypted_split;
+let username;
+let password;
+
 ws.on("connection", (socket) => {
     socket.on("message", (message_buffer) => {
         const message = message_buffer.toString();
@@ -38,58 +44,55 @@ ws.on("connection", (socket) => {
 
                     try {
                         // Decrypt the message with the private key
-                        const decrypted = keypair.privateKey.decrypt(message);
-                        console.log(`Decrypted message: ${decrypted}`);
-
-                        try {
-                            // Make sure the message only contains 2 parts
-                            const decrypted_split = decrypted.split(";;");
-                            if (decrypted_split.length > 2) {
-                                socket.send(`ERR;;CLIENT;;Please specify only a username and password.`);
-                                socket.close();
-                                return;
-                            }
-                            if (decrypted_split.length < 2) {
-                                socket.send(`ERR;;CLIENT;;Please specify both a username and password.`);
-                                socket.close();
-                                return;
-                            }
-
-                            try {
-                                // Base64 decode the username and password
-                                const username = helper.base64decode(decrypted_split[0]);
-                                const password = helper.base64decode(decrypted_split[1]);
-                                console.log(`Username: ${username}, password: ${password}`);
-
-                                // Make sure the username and password fit the criteria
-                                if (!config.regex.username.test(username)) {
-                                    socket.send(`ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`);
-                                    socket.close();
-                                    return;
-                                }
-                                if (!config.regex.password.test(password)) {
-                                    socket.send(`ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`);
-                                    socket.close();
-                                    return;
-                                }
-
-                                socket.send(`REGISTRATION;;${username};;${password}`);
-                            } catch (err) {
-                                socket.send(`ERR;;SERVER;;An error occurred while decoding the username and password.`);
-                                socket.close();
-                                return;
-                            }
-                        } catch (err) {
-                            socket.send(`ERR;;SERVER;;An error occurred while splitting the decrypted message.`);
-                            socket.close();
-                            return;
-                        }
+                        decrypted = keypair.privateKey.decrypt(message);
                     } catch (err) {
-                        console.error(err);
                         socket.send(`ERR;;CLIENT;;Invalid message.`);
                         socket.close();
                         return;
                     }
+
+                    try {
+                        // Make sure the message only contains 2 parts
+                        decrypted_split = decrypted.split(";;");
+                        if (decrypted_split.length > 2) {
+                            socket.send(`ERR;;CLIENT;;Please specify only a username and password.`);
+                            socket.close();
+                            return;
+                        }
+                        if (decrypted_split.length < 2) {
+                            socket.send(`ERR;;CLIENT;;Please specify both a username and password.`);
+                            socket.close();
+                            return;
+                        }
+                    } catch (err) {
+                        socket.send(`ERR;;SERVER;;An error occurred while splitting the decrypted message.`);
+                        socket.close();
+                        return;
+                    }
+
+                    try {
+                        // Base64 decode the username and password
+                        username = helper.base64decode(decrypted_split[0]);
+                        password = helper.base64decode(decrypted_split[1]);
+                    } catch (err) {
+                        socket.send(`ERR;;SERVER;;An error occurred while decoding the username and password.`);
+                        socket.close();
+                        return;
+                    }
+
+                    // Make sure the username and password fit the criteria
+                    if (!config.regex.username.test(username)) {
+                        socket.send(`ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`);
+                        socket.close();
+                        return;
+                    }
+                    if (!config.regex.password.test(password)) {
+                        socket.send(`ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`);
+                        socket.close();
+                        return;
+                    }
+
+                    socket.send(`REGISTRATION;;${username};;${password}`);
                 });
             });
         }
