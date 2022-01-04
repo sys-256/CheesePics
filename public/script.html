@@ -13,22 +13,8 @@
 
 <body>
     <script>
-        /*const startTime = performance.now();
-
         const socket = new WebSocket("ws://192.168.2.15:8071");
-        let amogus = false;
-
-        socket.onopen = (event) => {
-            socket.send("REGI");
-        }
-
-        socket.onmessage = (event) => {
-            if (amogus) socket.close();
-            socket.send(forge.pki.publicKeyFromPem(event.data).encrypt("sus"));
-            amogus = true
-        }
-
-        socket.onclose = () => { console.log(performance.now() - startTime) }*/
+        socket.onmessage = (event) => {console.log(event.data)}
     </script>
 </body>
 
