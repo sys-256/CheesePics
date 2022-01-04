@@ -1,0 +1,32 @@
+{
+  "name": "cheesepics",
+  "version": "1.0.0",
+  "description": "Web front- and backend for cheese pictures.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "nodemon src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.sys-256.ga/sys-256/CheesePics"
+  },
+  "keywords": [
+    "cheese",
+    "pictures",
+    "sqlite"
+  ],
+  "author": "sys-256 (Bram)",
+  "license": "GPL-3.0-or-later",
+  "devDependencies": {
+    "nodemon": "2.0.15"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^7.4.6",
+    "ejs": "^3.1.6",
+    "express.js": "^1.0.0",
+    "node-forge": "^0.10.0",
+    "ws": "^8.4.0"
+  }
+}
