@@ -1,5 +1,5 @@
 // Get variables from config.json
-const config = require("../config.json");
+const config = require("../config.js");
 
 // Import packages
 const db = require("better-sqlite3")(config.database.url);
@@ -34,6 +34,6 @@ app.get("/", (request, response) => {
 require("./websocket.js");
 
 // Start the HTTP server
-app.listen(config.http_port, () => {
-    console.log(`Listening for http connections on port ${config.http_port}`);
+app.listen(config.port.http, () => {
+    console.log(`Listening for http connections on port ${config.port.http}`);
 });
