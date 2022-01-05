@@ -4,7 +4,6 @@ const config = require("../config.js");
 // Import packages
 const db = require("better-sqlite3")(config.database.url);
 const forge = require("node-forge");
-const sha512 = require("js-sha512");
 const helper = require("./helper.js");
 
 const WebSocket = require("ws");
