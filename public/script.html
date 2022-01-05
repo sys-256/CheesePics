@@ -14,7 +14,22 @@
 <body>
     <script>
         const socket = new WebSocket("ws://192.168.2.15:8071");
-        socket.onmessage = (event) => {console.log(event.data)}
+
+        socket.onopen = function(event) {
+            console.log("Connected to server");
+            socket.send("REGI");
+        };
+
+        socket.onmessage = (event) => {
+            console.log(event.data)
+            const splitted = event.data.split(";;");
+            if (splitted[0] === "PUBLICKEY") {
+                const pubicKey = forge.pki.publicKeyFromPem(splitted[1]);
+                const encrypted = pubicKey.encrypt(`${btoa("amogus")};;${btoa("Joemomma@69")}`);
+
+                socket.send(encrypted);
+            }
+        };
     </script>
 </body>
 
