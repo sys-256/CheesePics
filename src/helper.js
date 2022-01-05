@@ -9,3 +9,7 @@ module.exports.base64encode = (message) => {
 module.exports.sha512 = (message) => {
     return require("crypto").createHash("sha512").update(message).digest("hex");
 }
+
+module.exports.generateSalt = (passwordLength) => {
+    return require("crypto").randomBytes(passwordLength + (Math.floor((Math.random() * 30) + 10)) / 2).toString("hex");
+}
