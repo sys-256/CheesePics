@@ -1,6 +1,11 @@
 module.exports = {
     "database": {
-        "url": "./app.db"
+        "main": {
+            "url": "./app.db"
+        },
+        "salt": {
+            "url": "./salt.db"
+        }
     },
     "port": {
         "http": 8070,

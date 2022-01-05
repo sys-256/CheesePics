@@ -2,7 +2,7 @@
 const config = require("../config.js");
 
 // Import packages
-const db = require("better-sqlite3")(config.database.url);
+const db = require("better-sqlite3")(config.database.main.url);
 const forge = require('node-forge');
 const express = require("express");
 const app = express();
