@@ -42,13 +42,20 @@ module.exports = (socket, message, keypair, clientPublickey) => {
     }
 
     // Make sure the username and password fit the criteria
-    if (!config.regex.username.test(username)) {
-        socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`));
-        socket.close();
-        return;
-    }
-    if (!config.regex.password.test(password)) {
-        socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`));
+    try {
+        if (!config.regex.username.test(username)) {
+            socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`));
+            socket.close();
+            return;
+        }
+        if (!config.regex.password.test(password)) {
+            socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`));
+            socket.close();
+            return;
+        }
+    } catch (err) {
+        console.log(err);
+        socket.send(clientPublickey.encrypt(`ERR;;SERVER;;An error occurred while checking the username and password fit the criteria.`));
         socket.close();
         return;
     }

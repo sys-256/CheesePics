@@ -15,12 +15,12 @@
     <script>
         const socket = new WebSocket("wss://amoamogus.ml/websocket");
 
-        const username = btoa("amoamogussus");
+        const username = btoa("rrr");
         const password = btoa("Joemomma@69420");
 
         const keypair = forge.pki.rsa.generateKeyPair({
-            bits: 1024,
-            workers: -1
+            "bits": 1024,
+            "workers": -1
         });
 
         socket.onmessage = (event) => {
@@ -31,13 +31,13 @@
                     const publicKey = forge.pki.publicKeyFromPem(message[1]);
                     const toEncrypt = `REGI;;${username};;${password}`;
                     const toSend = `${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${publicKey.encrypt(`${toEncrypt}`)}`
-                    console.log(toSend);
+                    console.log(`To send: ${toSend}`);
                     socket.send(toSend);
                 }
             } else {
                 // Decrypt with keypair 
                 const message = keypair.privateKey.decrypt(event.data);
-                console.log(message);
+                console.log(`Decrypted: ${message}`);
             }
         };
     </script>
