@@ -143,6 +143,10 @@ ws.on("connection", (socket) => {
                     socket.send(`SUCCESS`);
                 });
             });
+        } else {
+            socket.send(`ERR;;CLIENT;;Invalid message.`);
+            socket.close();
+            return;
         }
     });
 });
