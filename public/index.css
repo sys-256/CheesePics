@@ -1,5 +1,14 @@
 @import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
 
+/*
+* Copyright (c) 2019 Beeline (Claude Derieppe)
+* https://www.fontspace.com/cheese-and-mouse-font-f32472
+*/
+@font-face {
+    font-family: CheeseFont;
+    src: url("CheeseFont.ttf");
+}
+
 body {
     background-color: #ffd983;
     font-family: Arial, Helvetica, sans-serif;
@@ -21,4 +30,19 @@ img#cheese-img {
     max-height: 30em;
     width: auto;
     max-width: 100%;
+}
+
+.link-home {
+    font-size: 1.5em;
+    font-family: "CheeseFont";
+}
+
+a:link, a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover, a:active {
+    color: black;
+    text-decoration: underline;
 }
