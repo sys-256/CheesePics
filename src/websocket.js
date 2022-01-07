@@ -111,6 +111,14 @@ ws.on("connection", (socket) => {
 
                     salt = helper.generateSalt(password.length);
 
+                    if (salt[1]) {
+                        socket.send(`ERR;;SERVER;;An error occurred while generating a salt.`);
+                        socket.close();
+                        return;
+                    }
+
+                    salt = salt[0];
+
                     // (Encode username) + (hash password + salt)
                     try {
                         username_db = helper.base64encode(username);
