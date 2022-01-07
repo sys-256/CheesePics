@@ -1,3 +1,13 @@
+# Node.js bloat
 node_modules/
 package-lock.json
+
+# Images
 public/images/
+
+# Database
+app.db
+salt.db
+
+# MacOS
+.DS_Store
