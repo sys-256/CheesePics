@@ -11,10 +11,5 @@ module.exports.sha512 = (message) => {
 }
 
 module.exports.generateSalt = (passwordLength) => {
-    return require("crypto").randomBytes(passwordLength + (Math.floor((Math.random() * 30) + 10)) / 2, (err, result) => {
-        if (error) {
-            return [undefined, error];
-        }
-        return [result.toString("hex"), undefined];
-    })
+    return require("crypto").randomBytes(passwordLength + (Math.floor((Math.random() * 30) + 10)) / 2).toString("hex");
 }
