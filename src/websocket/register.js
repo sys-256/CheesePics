@@ -24,8 +24,8 @@ module.exports = (socket, message_buffer, keypair) => {
         return;
     }
 
+    // Decrypt the message with the private key
     try {
-        // Decrypt the message with the private key
         decrypted = keypair.privateKey.decrypt(message);
     } catch (err) {
         socket.send(`ERR;;CLIENT;;Invalid message.`);
@@ -33,8 +33,8 @@ module.exports = (socket, message_buffer, keypair) => {
         return;
     }
 
+    // Make sure the message only contains 2 parts
     try {
-        // Make sure the message only contains 2 parts
         decrypted_split = decrypted.split(";;");
         if (decrypted_split.length > 2) {
             socket.send(`ERR;;CLIENT;;Please specify only a username and password.`);
@@ -47,6 +47,7 @@ module.exports = (socket, message_buffer, keypair) => {
             return;
         }
     } catch (err) {
+        console.log(err);
         socket.send(`ERR;;SERVER;;An error occurred while splitting the decrypted message.`);
         socket.close();
         return;
@@ -67,11 +68,12 @@ module.exports = (socket, message_buffer, keypair) => {
         return;
     }
 
+    // Base64 decode the username and password
     try {
-        // Base64 decode the username and password
         username = helper.base64decode(decrypted_split[0]);
         password = helper.base64decode(decrypted_split[1]);
     } catch (err) {
+        console.log(err);
         socket.send(`ERR;;SERVER;;An error occurred while decoding the username and password.`);
         socket.close();
         return;
@@ -89,6 +91,7 @@ module.exports = (socket, message_buffer, keypair) => {
         return;
     }
 
+    // Generate salt
     salt = helper.generateSalt(password.length);
 
     // (Encode username) + (hash password + salt)
@@ -96,6 +99,7 @@ module.exports = (socket, message_buffer, keypair) => {
         username_db = helper.base64encode(username);
         password_db = helper.sha512(password + salt);
     } catch (err) {
+        console.log(err);
         socket.send(`ERR;;SERVER;;An error occurred while encoding the username or hashing/salting the password.`);
         socket.close();
         return;
@@ -106,6 +110,7 @@ module.exports = (socket, message_buffer, keypair) => {
         db.prepare("INSERT INTO login (username, password) VALUES (?, ?);").run(username_db, password_db);
         salt_db.prepare("INSERT INTO main (username, salt) VALUES (?, ?);").run(username_db, salt);
     } catch (err) {
+        console.log(err);
         socket.send(`ERR;;SERVER;;An error occurred while inserting the username, password and salt into the database.`);
         socket.close();
         return;
