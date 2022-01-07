@@ -3,7 +3,10 @@ const config = require("../config.js");
 
 // Import packages
 const db = require("better-sqlite3")(config.database.main.url);
+const salt_db = require("better-sqlite3")(config.database.salt.url);
 const forge = require('node-forge');
+const helper = require("./helper.js");
+
 const express = require("express");
 const app = express();
 
