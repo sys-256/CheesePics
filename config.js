@@ -8,8 +8,8 @@ module.exports = {
         }
     },
     "port": {
-        "http": 8070,
-        "websocket": 8071
+        "http": 8030,
+        "websocket": 8031
     },
     "regex": {
         "username": /^[A-Za-z0-9_-\p{L}]{3,15}$/g,
