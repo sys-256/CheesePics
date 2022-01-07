@@ -17,6 +17,6 @@ module.exports = {
     },
     "rsa": {
         "bits": 1024,
-        "workers": 3
+        "workers": 5
     }
 }
