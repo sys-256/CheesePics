@@ -13,28 +13,55 @@ const ws = new WebSocket.Server({ port: config.port.websocket }, async () => {
 });
 
 ws.on("connection", async (socket) => {
-    socket.on("message", async (message_buffer) => {
-        const message = message_buffer.toString();
-        if (message === "REGI") {
-            forge.pki.rsa.generateKeyPair({
-                "bits": 1024,
-                "workers": -1,
-                "workerScript": "https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/prime.worker.min.js"
-            }, async (err, keypair) => {
-                if (err) {
-                    console.error(err);
-                    socket.send(`ERR;;SERVER;;An error occurred while generating a keypair.`);
+    forge.pki.rsa.generateKeyPair({
+        "bits": config.rsa.bits,
+        "workers": config.rsa.workers
+    }, async (err, keypair) => {
+        if (err) {
+            console.error(err);
+            socket.send(`ERR;;SERVER;;An error occurred while generating a keypair.`);
+            socket.close();
+            return;
+        }
+        socket.send(`PUBLICKEY;;${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}`);
+
+        socket.on("message", async (message_buffer) => {
+            const message_encrypted = message_buffer.toString();
+
+            const clientPublickey = forge.pki.publicKeyFromPem(message_encrypted.split("::")[0]);
+            const new_message = message_encrypted.slice(message_encrypted.indexOf("::") + 2);
+
+            // Make sure it's a valid encrypted message
+            if (new_message.length !== 128) {
+                socket.send(`ERR;;CLIENT;;Invalid message length.`);
+                socket.close();
+                return;
+            }
+
+            // Decrypt the message with the private key and split it into parts by ;;
+            const message = keypair.privateKey.decrypt(new_message).split(";;");
+
+            // Check if the message contains at least 2 parts
+            if (message.length < 1) {
+                socket.send(`ERR;;CLIENT;;Specify at least a public key and method.`);
+                socket.close();
+                return;
+            }
+
+            if (message[0] === "REGI") {
+                // Check if the message enough info
+                if (message.length !== 3) {
+                    socket.send(`ERR;;CLIENT;;Specify (only) a method, username and password.`);
                     socket.close();
                     return;
                 }
-                socket.send(`PUBLICKEY;;${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}`);
-                socket.on("message", async (message_buffer) => {
-                    require("./websocket/register.js")(socket, message_buffer, keypair);
-                });
-            });
-        }
-        if (message === "LOGI") {
-            socket.send("elo")
-        }
+
+                require("./websocket/register.js")(socket, message, keypair, clientPublickey);
+            }
+            if (message[0] === "LOGI") {
+                const clientPublicKey = forge.pki.publicKeyFromPem(message[0]);
+                socket.send(clientPublicKey.encrypt("elo"))
+            }
+        });
     });
 });

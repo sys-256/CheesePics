@@ -15,19 +15,29 @@
     <script>
         const socket = new WebSocket("wss://amoamogus.ml/websocket");
 
-        socket.onopen = function(event) {
-            console.log("Connected to server");
-            socket.send("REGI");
-        };
+        const username = btoa("amoamogussus");
+        const password = btoa("Joemomma@69420");
+
+        const keypair = forge.pki.rsa.generateKeyPair({
+            bits: 1024,
+            workers: -1
+        });
 
         socket.onmessage = (event) => {
-            console.log(event.data)
-            const splitted = event.data.split(";;");
-            if (splitted[0] === "PUBLICKEY") {
-                const pubicKey = forge.pki.publicKeyFromPem(splitted[1]);
-                const encrypted = pubicKey.encrypt(`${btoa("amogus")};;${btoa("Joemomma@69")}`);
-
-                socket.send(encrypted);
+            console.log(event.data);
+            if (event.data.length !== 128) { // Is plain text
+                const message = event.data.split(";;");
+                if (message[0] === "PUBLICKEY") {
+                    const publicKey = forge.pki.publicKeyFromPem(message[1]);
+                    const toEncrypt = `REGI;;${username};;${password}`;
+                    const toSend = `${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${publicKey.encrypt(`${toEncrypt}`)}`
+                    console.log(toSend);
+                    socket.send(toSend);
+                }
+            } else {
+                // Decrypt with keypair 
+                const message = keypair.privateKey.decrypt(event.data);
+                console.log(message);
             }
         };
     </script>
