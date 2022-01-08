@@ -19,3 +19,7 @@ module.exports.pbkdf2 = (password, salt) => {
 module.exports.generateSalt = (passwordLength) => {
     return require("crypto").randomBytes(passwordLength + (Math.floor((Math.random() * 30) + 10)) / 2).toString("hex");
 }
+
+module.exports.generateSessionID = () => {
+    return require("crypto").randomBytes(6).toString("hex");
+}

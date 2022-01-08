@@ -24,5 +24,8 @@ module.exports = {
         "keyLength": 128,
         "algorithm": "sha512"
         
-    }
+    },
+    "session": {
+        "expires": 604800
+    },
 }

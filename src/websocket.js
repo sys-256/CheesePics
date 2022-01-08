@@ -59,8 +59,14 @@ ws.on("connection", async (socket) => {
                 require("./websocket/register.js")(socket, message, clientPublickey);
             }
             if (message[0] === "LOGI") {
-                const clientPublicKey = forge.pki.publicKeyFromPem(message[0]);
-                socket.send(clientPublicKey.encrypt("elo"))
+                // Check if the message enough info
+                if (message.length !== 3) {
+                    socket.send(`ERR;;CLIENT;;Specify (only) a method, username and password.`);
+                    socket.close();
+                    return;
+                }
+
+                require("./websocket/login.js")(socket, message, clientPublickey);
             }
         });
     });
