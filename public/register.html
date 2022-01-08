@@ -26,7 +26,6 @@
         });
 
         socket.onmessage = (event) => {
-            console.log(event.data);
             if (event.data.length !== 128) { // Is plain text
                 const message = event.data.split(";;");
                 if (message[0] === "PUBLICKEY") {
@@ -45,7 +44,6 @@
             const username = btoa(document.getElementById("username-input").value);
             const password = btoa(document.getElementById("password-input").value);
             const toEncrypt = `REGI;;${username};;${password}`;
-            console.log(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`${toEncrypt}`)}`)
             socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`${toEncrypt}`)}`);
         });
     </script>
