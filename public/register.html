@@ -12,11 +12,13 @@
 </head>
 
 <body>
+    <input type="text" id="username-input" placeholder="Username" class="input" required><br>
+    <input type="password" id="password-input" placeholder="Password" class="input" required><br><br>
+    <button id="submit-input">Submit</button>
     <script>
         const socket = new WebSocket("wss://amoamogus.ml/websocket");
 
-        const username = btoa("rrr");
-        const password = btoa("Joemomma@69420");
+        let serverPublicKey;
 
         const keypair = forge.pki.rsa.generateKeyPair({
             "bits": 1024,
@@ -28,11 +30,9 @@
             if (event.data.length !== 128) { // Is plain text
                 const message = event.data.split(";;");
                 if (message[0] === "PUBLICKEY") {
-                    const publicKey = forge.pki.publicKeyFromPem(message[1]);
-                    const toEncrypt = `REGI;;${username};;${password}`;
-                    const toSend = `${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${publicKey.encrypt(`${toEncrypt}`)}`
-                    console.log(`To send: ${toSend}`);
-                    socket.send(toSend);
+                    serverPublicKey = forge.pki.publicKeyFromPem(message[1]);
+                } else {
+                    console.log(message);
                 }
             } else {
                 // Decrypt with keypair 
@@ -40,6 +40,14 @@
                 console.log(`Decrypted: ${message}`);
             }
         };
+
+        document.getElementById("submit-input").addEventListener("click", () => {
+            const username = btoa(document.getElementById("username-input").value);
+            const password = btoa(document.getElementById("password-input").value);
+            const toEncrypt = `REGI;;${username};;${password}`;
+            console.log(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`${toEncrypt}`)}`)
+            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`${toEncrypt}`)}`);
+        });
     </script>
 </body>
 
