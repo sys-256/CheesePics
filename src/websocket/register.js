@@ -19,13 +19,13 @@ module.exports = (socket, message, keypair, clientPublickey) => {
     try {
         const result = db.prepare("SELECT * FROM login WHERE username=?").get(message[1]);
         if (result) {
-            socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The username already exists.`));
+            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;This username is already taken.`));
             socket.close();
             return;
         }
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`ERR;;SERVER;;An error occurred while checking if the user already exists.`));
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while checking if the user already exists.`));
         socket.close();
         return;
     }
@@ -36,7 +36,7 @@ module.exports = (socket, message, keypair, clientPublickey) => {
         password = helper.base64decode(message[2]);
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`ERR;;SERVER;;An error occurred while decoding the username and password.`));
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username and password.`));
         socket.close();
         return;
     }
@@ -44,18 +44,18 @@ module.exports = (socket, message, keypair, clientPublickey) => {
     // Make sure the username and password fit the criteria
     try {
         if (!config.regex.username.test(username)) {
-            socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`));
+            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`));
             socket.close();
             return;
         }
         if (!config.regex.password.test(password)) {
-            socket.send(clientPublickey.encrypt(`ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`));
+            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`));
             socket.close();
             return;
         }
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`ERR;;SERVER;;An error occurred while checking the username and password fit the criteria.`));
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while checking the username and password fit the criteria.`));
         socket.close();
         return;
     }
@@ -66,10 +66,10 @@ module.exports = (socket, message, keypair, clientPublickey) => {
     // (Encode username) + (hash password + salt)
     try {
         username_db = helper.base64encode(username);
-        password_db = helper.sha512(password + salt);
+        password_db = helper.pbkdf2(password, salt);
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`ERR;;SERVER;;An error occurred while encoding the username or hashing/salting the password.`));
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username or hashing/salting the password.`));
         socket.close();
         return;
     }
@@ -80,11 +80,11 @@ module.exports = (socket, message, keypair, clientPublickey) => {
         salt_db.prepare("INSERT INTO main (username, salt) VALUES (?, ?);").run(username_db, salt);
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`ERR;;SERVER;;An error occurred while inserting the username, password and salt into the database.`));
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while inserting the username, password and salt into the database.`));
         socket.close();
         return;
     }
 
     // Send success message
-    socket.send(clientPublickey.encrypt(`SUCCESS`));
+    socket.send(clientPublickey.encrypt(`REGI;;SUCCESS`));
 }

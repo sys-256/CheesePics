@@ -18,5 +18,11 @@ module.exports = {
     "rsa": {
         "bits": 1024,
         "workers": 5
+    },
+    "pbkdf2": {
+        "iterations": 25000,
+        "keyLength": 128,
+        "algorithm": "sha512"
+        
     }
 }
