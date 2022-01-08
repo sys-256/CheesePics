@@ -8,10 +8,6 @@ module.exports.base64encode = (message) => {
     return Buffer.from(message, "utf-8").toString("base64");
 }
 
-module.exports.sha512 = (message) => {
-    return require("crypto").createHash("sha512").update(message).digest("hex");
-}
-
 module.exports.pbkdf2 = (password, salt) => {
     return require("crypto").pbkdf2Sync(password, salt, config.pbkdf2.iterations, config.pbkdf2.keyLength, config.pbkdf2.algorithm).toString("hex");
 }
