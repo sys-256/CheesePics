@@ -14,7 +14,7 @@ let username_db;
 let password_db;
 let salt;
 
-module.exports = (socket, message, keypair, clientPublickey) => {
+module.exports = (socket, message, clientPublickey) => {
     // Check if the user already exists in the database
     try {
         const result = db.prepare("SELECT * FROM login WHERE username=?").get(message[1]);
@@ -44,12 +44,12 @@ module.exports = (socket, message, keypair, clientPublickey) => {
     // Make sure the username and password fit the criteria
     try {
         if (!config.regex.username.test(username)) {
-            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;The username doesn't match the critera of ${config.regex.username}.`));
+            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;The username doesn't match the critera.`));
             socket.close();
             return;
         }
         if (!config.regex.password.test(password)) {
-            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;The password doesn't match the critera of ${config.regex.password}.`));
+            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;The password doesn't match the critera.`));
             socket.close();
             return;
         }

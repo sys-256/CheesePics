@@ -56,7 +56,7 @@ ws.on("connection", async (socket) => {
                     return;
                 }
 
-                require("./websocket/register.js")(socket, message, keypair, clientPublickey);
+                require("./websocket/register.js")(socket, message, clientPublickey);
             }
             if (message[0] === "LOGI") {
                 const clientPublicKey = forge.pki.publicKeyFromPem(message[0]);
