@@ -43,8 +43,7 @@
         document.getElementById("submit-input").addEventListener("click", () => {
             const username = btoa(document.getElementById("username-input").value);
             const password = btoa(document.getElementById("password-input").value);
-            const toEncrypt = `REGI;;${username};;${password}`;
-            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`${toEncrypt}`)}`);
+            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`REGI;;${username};;${password}`)}`);
         });
     </script>
 </body>
