@@ -88,6 +88,28 @@ module.exports = (socket, message, clientPublickey) => {
         return;
     }
 
+    // Check if there is a session with the same username
+    try {
+        const result = db.prepare("SELECT * FROM sessions WHERE username=?").get(message[1]);
+        if (result) {
+            // Check if the session is valid
+            if (result.expires > Date.now()) {
+                socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${result.id}`));
+                socket.close();
+                return;
+            }
+            // If the session is not valid, delete it
+            else {
+                db.prepare("DELETE FROM sessions WHERE username=?").run(message[1]);
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while checking if there is a session with the same username.`));
+        socket.close();
+        return;
+    }
+
     // Generate a random session key and when it expires
     const session_key = helper.generateSessionID();
     const expires = Date.now() + config.session.expires;
@@ -104,4 +126,6 @@ module.exports = (socket, message, clientPublickey) => {
 
     // Send the session key to the client
     socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${session_key}`));
+    socket.close();
+    return;
 };
