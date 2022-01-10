@@ -28,4 +28,8 @@ module.exports = {
     "session": {
         "expires": 604800
     },
+    "memcached": {
+        "host": "localhost",
+        "port": 11211
+    }
 }
