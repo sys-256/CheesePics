@@ -5,9 +5,5 @@ package-lock.json
 # Images
 public/images/
 
-# Database
-app.db
-salt.db
-
 # MacOS
 .DS_Store
