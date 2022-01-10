@@ -25,6 +25,7 @@
     "better-sqlite3": "^7.4.6",
     "ejs": "^3.1.6",
     "express": "^4.17.2",
+    "memcached": "^2.2.2",
     "node-forge": "^1.2.0",
     "ws": "^8.4.0"
   }
