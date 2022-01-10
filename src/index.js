@@ -6,6 +6,14 @@ const db = require("better-sqlite3")(config.database.main.url);
 const salt_db = require("better-sqlite3")(config.database.salt.url);
 const forge = require('node-forge');
 const helper = require("./helper.js");
+const Memcached = require("memcached");
+const memcached = new Memcached().connect(`${config.memcached.url}:${config.memcached.port}`, (error, result) => {
+    if (error) {
+        console.log(`Failed to connect to memcached server: ${error}`);
+        exit(1);
+        return;
+    }
+});
 
 const express = require("express");
 const app = express();
