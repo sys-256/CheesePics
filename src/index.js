@@ -9,8 +9,8 @@ const helper = require("./helper.js");
 const Memcached = require("memcached");
 const memcached = new Memcached().connect(`${config.memcached.url}:${config.memcached.port}`, (error, result) => {
     if (error) {
-        console.log(`Failed to connect to memcached server: ${error}`);
-        exit(1);
+        console.log(`index.js: Failed to connect to memcached server: ${error}`);
+        process.exit(1);
         return;
     }
 });
