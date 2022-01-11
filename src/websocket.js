@@ -15,8 +15,8 @@ const memcached = new Memcached().connect(`${config.memcached.url}:${config.memc
     }
 });
 
-const WebSocket = require("ws");
-const ws = new WebSocket.Server({ port: config.port.websocket }, async () => {
+const websocket = require("ws");
+const ws = new websocket.Server({ port: config.port.websocket }, async () => {
     console.log(`Listening for WebSocket connections on port ${config.port.websocket}`);
 });
 
@@ -36,7 +36,14 @@ ws.on("connection", async (socket) => {
         socket.on("message", async (message_buffer) => {
             const message_encrypted = message_buffer.toString();
 
-            const clientPublickey = forge.pki.publicKeyFromPem(message_encrypted.split("::")[0]);
+            let clientPublickey;
+            try {
+                clientPublickey = forge.pki.publicKeyFromPem(message_encrypted.split("::")[0]);
+            } catch (err) {
+                socket.send(`ERR;;CLIENT;;Please send a valid public key.`);
+                socket.close();
+                return;
+            }
             const new_message = message_encrypted.slice(message_encrypted.indexOf("::") + 2);
 
             // Make sure it's a valid encrypted message
