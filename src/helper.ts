@@ -1,18 +1,18 @@
 const config = require("../config.js");
 
-module.exports.base64decode = (message) => {
+module.exports.base64decode = (message: string) => {
     return Buffer.from(message, "base64").toString("utf-8");
 }
 
-module.exports.base64encode = (message) => {
+module.exports.base64encode = (message: string) => {
     return Buffer.from(message, "utf-8").toString("base64");
 }
 
-module.exports.pbkdf2 = (password, salt) => {
+module.exports.pbkdf2 = (password: string, salt: string) => {
     return require("crypto").pbkdf2Sync(password, salt, config.pbkdf2.iterations, config.pbkdf2.keyLength, config.pbkdf2.algorithm).toString("hex");
 }
 
-module.exports.generateSalt = (passwordLength) => {
+module.exports.generateSalt = (passwordLength: number) => {
     return require("crypto").randomBytes(passwordLength + (Math.floor((Math.random() * 30) + 10)) / 2).toString("hex");
 }
 
