@@ -1,13 +1,13 @@
 {
-    "compilerOptions": {
-      "module": "system",
-      "target": "ESNEXT",
-      "noImplicitAny": true,
-      "removeComments": true,
-      "preserveConstEnums": true,
-      "outFile": "build/main.js",
-      "sourceMap": true
-    },
+  "compilerOptions": {
+    "target": "ESNEXT",
+    "noImplicitAny": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "outDir": "build",
+    "sourceMap": true,
+    "allowSyntheticDefaultImports": true
+  },
   "include": [
     "src/**/*"
   ],
