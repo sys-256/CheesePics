@@ -9,7 +9,7 @@ import forge from 'node-forge';
 import Memcached from "memcached";
 const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
 
-import { base64decode, base64encode, pbkdf2, generateSalt, generateSessionID } from "./helper.js";
+import * as helper from "./helper.js";
 import startWSServer from "./websocket.js";
 
 import express from "express";
