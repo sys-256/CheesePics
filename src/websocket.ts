@@ -24,7 +24,7 @@ const startWSServer = () => {
         forge.pki.rsa.generateKeyPair({
             "bits": config.rsa.bits,
             "workers": config.rsa.workers
-        }, async (error: any, keypair: any) => {
+        }, async (error: Error, keypair: forge.pki.rsa.KeyPair) => {
             if (error) {
                 console.error(error);
                 socket.send(`ERR;;SERVER;;An error occurred while generating a keypair.`);

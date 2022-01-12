@@ -19,7 +19,7 @@ let username_db;
 let password_db;
 let salt;
 
-export const register = (socket: any, message: string, clientPublickey: any) => {
+export const register = (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
     // Check if the user already exists in the database
     try {
         const result = db.prepare("SELECT * FROM login WHERE username=?").get(message[1]);
