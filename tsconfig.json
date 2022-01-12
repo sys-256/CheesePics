@@ -8,6 +8,11 @@
       "outFile": "build/main.js",
       "sourceMap": true
     },
-    "include": ["src/**/*", "*.ts"],
-    "exclude": ["node_modules", "**/*.spec.ts"]
-  }
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/*.spec.ts"
+  ]
+}
