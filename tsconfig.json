@@ -1,12 +1,15 @@
 {
   "compilerOptions": {
     "target": "ESNEXT",
+    "strict": true,
+    "outDir": "build",
+    "sourceMap": true,
     "noImplicitAny": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "outDir": "build",
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
   },
   "include": [
     "src/**/*"
