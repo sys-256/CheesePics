@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "Web front- and backend for cheese pictures.",
   "main": "src/index.js",
+  "type": "module",
   "scripts": {
-    "start": "node src/index.js",
-    "dev": "nodemon src/index.js"
+    "start": "node build/src/index.js",
+    "dev": "nodemon build/src/index.js",
+    "build": "rm build/ -rf; tsc"
   },
   "repository": {
     "type": "git",
@@ -19,6 +21,11 @@
   "author": "sys-256 (Bram)",
   "license": "GPL-3.0-or-later",
   "devDependencies": {
+    "@types/better-sqlite3": "^7.4.2",
+    "@types/express": "^4.17.13",
+    "@types/memcached": "^2.2.7",
+    "@types/node-forge": "^1.0.0",
+    "@types/ws": "^8.2.2",
     "nodemon": "2.0.15"
   },
   "dependencies": {
