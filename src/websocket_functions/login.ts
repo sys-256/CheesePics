@@ -1,19 +1,16 @@
+export {};
 // Get variables from config.json
-const config = require("../../config.js");
+import { config } from "../../config.js";
 
 // Import packages
-const db = require("better-sqlite3")(config.database.main.url);
-const salt_db = require("better-sqlite3")(config.database.salt.url);
-const forge = require("node-forge");
-const helper = require("../helper.js");
-const Memcached = require("memcached");
-const memcached = new Memcached().connect(`${config.memcached.url}:${config.memcached.port}`, (error, result) => {
-    if (error) {
-        console.log(`websocket/login.js: Failed to connect to memcached server: ${error}`);
-        process.exit(1);
-        return;
-    }
-});
+import Database from 'better-sqlite3'
+const db = new Database(config.database.main.url);
+const salt_db = new Database(config.database.salt.url);
+import forge from 'node-forge';
+import Memcached from "memcached";
+const memcached:Memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
+
+import * as helper from "../helper.js";
 
 // Declare variables to avoid try/catch hell
 let username;
@@ -23,7 +20,7 @@ let username_compare;
 let password_compare;
 let db_result;
 
-module.exports = (socket, message, clientPublickey) => {
+export const login = (socket: any, message: string[], clientPublickey: any) => {
     // Check if the user exists
     try {
         const result = db.prepare("SELECT * FROM login WHERE username=?").get(message[1]);
