@@ -1,4 +1,3 @@
-export { };
 // Get variables from config.json
 import { config } from "../config.js";
 

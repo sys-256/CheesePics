@@ -1,4 +1,4 @@
-export {};
+export { };
 // Get variables from config.json
 import { config } from "../../config.js";
 
@@ -8,7 +8,7 @@ const db = new Database(config.database.main.url);
 const salt_db = new Database(config.database.salt.url);
 import forge from 'node-forge';
 import Memcached from "memcached";
-const memcached:Memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
+const memcached: Memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
 
 import * as helper from "../helper.js";
 
