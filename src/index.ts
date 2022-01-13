@@ -38,6 +38,18 @@ app.get("/", (request: any, response: any) => {
     })
 });
 
+app.get("/register", (request: any, response: any) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    response.status(200).render("register.ejs", {
+        "ranNum": Math.floor(Math.random() * 496 + 1)
+    })
+});
+
 // Start the WebSocket server
 startWSServer();
 

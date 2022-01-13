@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" translate="no">
+
+<head>
+    <!-- Browser standards -->
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="referrer" content="no-referrer">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="index.css">
+    <script crossorigin="anonymous" referrerpolicy="no-referrer"
+        integrity="sha512-S/UB/AdGt16YP1OyopwfVG1BO93nkwVNY7No5zfALnztixutqOuP3DGvo7G4YqB77uL791jWNjQnT/63CjOZNw=="
+        src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+    <script crossorigin="anonymous" referrerpolicy="no-referrer"
+        integrity="sha512-Kef5sc7gfTacR7TZKelcrRs15ipf7+t+n7Zh6mKNJbmW+/RRdCW9nwfLn4YX0s2nO6Kv5Y2ChqgIakaC6PW09A=="
+        src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+
+    <!-- SEO -->
+    <title>Register | CheesePics</title>
+    <meta name="description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
+    <meta name="author" content="sys-256 (Bram)">
+    <meta name="keywords" content="cheese, Cheese, CheesePics, cheesepics, CheesePics.xyz, cheesepics.xyz">
+    <meta property="og:title" content="Register | CheesePics">
+    <meta property="og:description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
+    <meta property="og:url" content="https://cheesepics.xyz/register">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:image" content="/favicon.png">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="CheesePics.xyz">
+</head>
+
+<body>
+    <div id="particles-bg"></div>
+    <script>
+        particlesJS.load("particles-bg", "/particles.json");
+    </script>
+    <nav>
+        <h1>
+            <a href="/" class="link-home">CheesePics</a>
+            <div style="float: right; margin-right: 10px;">
+                <a href="/login"><button id="login-button"><i
+                            class="fa-solid fa-right-to-bracket"></i>&nbsp;Login</button></a>
+                <a href="/register"><button id="register-button"><i class="fa-solid fa-user-plus"></i>&nbsp;Create
+                        account</button></a>
+            </div>
+        </h1>
+    </nav>
+    <br><br>
+    <input type="text" id="username-input" placeholder="Username" class="input" required><br>
+    <input type="password" id="password-input" placeholder="Password" class="input" required><br><br>
+    <button id="submit-input">Submit</button>
+    <script>
+        const socket = new WebSocket("wss://amoamogus.ml/websocket");
+
+        let serverPublicKey;
+
+        const keypair = forge.pki.rsa.generateKeyPair({
+            "bits": 1024,
+            "workers": -1
+        });
+
+        socket.onmessage = (event) => {
+            if (event.data.length !== 128) { // Is plain text
+                const message = event.data.split(";;");
+                if (message[0] === "PUBLICKEY") {
+                    serverPublicKey = forge.pki.publicKeyFromPem(message[1]);
+                } else {
+                    console.log(message);
+                }
+            } else {
+                // Decrypt with keypair 
+                const message = keypair.privateKey.decrypt(event.data);
+                console.log(`Decrypted: ${message}`);
+            }
+        };
+
+        document.getElementById("submit-input").addEventListener("click", () => {
+            const username = btoa(document.getElementById("username-input").value);
+            const password = btoa(document.getElementById("password-input").value);
+            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`LOGI;;${username};;${password}`)}`);
+        });
+    </script>
+</body>
+
+</html>
