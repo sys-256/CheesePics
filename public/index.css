@@ -17,6 +17,17 @@ body {
 nav {
     background-color: #ffac33;
     height: 5em;
+    border-radius: 15px;
+
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+div.image-div {
+    /* center the div */
+    display: grid;
+    justify-content: center;
+    text-align: center;
 }
 
 img.emoji {
@@ -27,6 +38,7 @@ img.emoji {
 }
 
 img#cheese-img {
+    min-height: 5em;
     max-height: 30em;
     width: auto;
     max-width: 100%;
