@@ -26,7 +26,7 @@ app.use(express.static("public", { // Make images available
 app.set("view engine", "ejs"); // Set the view engine renderer to ejs
 app.set("views", "dynamic") // Set ejs directory
 
-app.get("/", (request: any, response: any) => {
+app.get("/", (request, response) => {
     response.header({
         "Access-Control-Allow-Origin": "*", // Enable requests from all sites
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
@@ -38,7 +38,7 @@ app.get("/", (request: any, response: any) => {
     })
 });
 
-app.get("/register", (request: any, response: any) => {
+app.get("/register", (request, response) => {
     response.header({
         "Access-Control-Allow-Origin": "*", // Enable requests from all sites
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
@@ -46,6 +46,18 @@ app.get("/register", (request: any, response: any) => {
     });
 
     response.status(200).render("register.ejs", {
+        "ranNum": Math.floor(Math.random() * 496 + 1)
+    })
+});
+
+app.get("/login", (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    response.status(200).render("login.ejs", {
         "ranNum": Math.floor(Math.random() * 496 + 1)
     })
 });
