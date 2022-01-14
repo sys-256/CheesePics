@@ -20,7 +20,7 @@ const startWSServer = () => {
         console.log(`Listening for WebSocket connections on port ${config.port.websocket}`);
     });
 
-    ws.on("connection", async (socket: any) => {
+    ws.on("connection", async (socket) => {
         forge.pki.rsa.generateKeyPair({
             "bits": config.rsa.bits,
             "workers": config.rsa.workers
@@ -33,7 +33,7 @@ const startWSServer = () => {
             }
             socket.send(`PUBLICKEY;;${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}`);
 
-            socket.on("message", async (message_buffer: Buffer) => {
+            socket.on("message", async (message_buffer) => {
                 const message_encrypted = message_buffer.toString();
 
                 let clientPublickey;
