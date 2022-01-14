@@ -62,6 +62,18 @@ app.get("/login", (request, response) => {
     })
 });
 
+app.get("/getCheeseLink", (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    response.status(200).send({
+        "link": helper.getCheeseLink()
+    });
+});
+
 // Start the WebSocket server
 startWSServer();
 
