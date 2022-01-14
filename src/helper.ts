@@ -58,4 +58,8 @@ function generateSessionID(): string {
     return crypto.randomBytes(6).toString("hex");
 }
 
-export { base64decode, base64encode, pbkdf2, generateSalt, generateSessionID };
+function getCheeseLink(): string {
+    return `https://cheesepics.xyz/images/${Math.floor(Math.random() * 496 + 1)}.jpg`;
+}
+
+export { base64decode, base64encode, pbkdf2, generateSalt, generateSessionID, getCheeseLink };
