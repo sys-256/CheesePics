@@ -21,8 +21,10 @@
     "author": "sys-256 (Bram)",
     "license": "GPL-3.0-or-later",
     "dependencies": {
+        "@types/cookie-parser": "^1.4.2",
         "@types/node": "^17.0.8",
         "better-sqlite3": "^7.4.6",
+        "cookie-parser": "^1.4.6",
         "ejs": "^3.1.6",
         "express": "^4.17.2",
         "memcached": "^2.2.2",

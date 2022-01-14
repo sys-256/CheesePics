@@ -31,5 +31,6 @@ export const config:any = {
     "memcached": {
         "host": "localhost",
         "port": 11211
-    }
+    },
+    "contact": "Hoiboy19#0920 on Discord"
 }

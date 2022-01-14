@@ -8,12 +8,15 @@ const salt_db = new Database(config.database.salt.url);
 import forge from 'node-forge';
 import Memcached from "memcached";
 const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
+import cookie_parser from 'cookie-parser';
 
 import * as helper from "./helper.js";
 import startWSServer from "./websocket.js";
 
 import express from "express";
 const app = express();
+
+app.use(cookie_parser());
 
 app.use(express.static("public", { // Make images available
     "setHeaders": (response: any) => {
