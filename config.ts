@@ -1,11 +1,9 @@
 export const config:any = {
     "database": {
-        "main": {
-            "url": "./app.db"
-        },
-        "salt": {
-            "url": "./salt.db"
-        }
+        "url": "localhost",
+        "port": 3306,
+        "user": "root",
+        "password": "passwd"
     },
     "port": {
         "http": 8030,
