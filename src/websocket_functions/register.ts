@@ -12,39 +12,33 @@ const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port
 
 import * as helper from "../helper.js";
 
-// Declare variables to avoid try/catch hell
-let username;
-let password;
-let username_db;
-let password_db;
-let salt;
-
-export const register = (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
+export const register = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
     // Check if the user already exists in the database
-    try {
-        const result = db.prepare("SELECT * FROM login WHERE username=?").get(message[1]);
-        if (result) {
-            socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;This username is already taken.`));
-            socket.close();
-            return;
-        }
-    } catch (err) {
-        console.log(err);
+    const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
+        console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while checking if the user already exists.`));
+        socket.close();
+        return;
+    });
+    if (result) {
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;This username is already taken.`));
         socket.close();
         return;
     }
 
     // Base64 decode the username and password
-    try {
-        username = helper.base64decode(message[1]);
-        password = helper.base64decode(message[2]);
-    } catch (err) {
-        console.log(err);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username and password.`));
+    const username = await helper.base64decode(message[1]).catch((error) => {
+        console.log(error);
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
         socket.close();
         return;
-    }
+    });
+    const password = await helper.base64decode(message[2]).catch((error) => {
+        console.log(error);
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
+        socket.close();
+        return;
+    });
 
     // Make sure the username and password fit the criteria
     try {
@@ -66,29 +60,34 @@ export const register = (socket: any, message: string[], clientPublickey: forge.
     }
 
     // Generate salt
-    salt = helper.generateSalt(password.length);
+    const salt = await helper.generateSalt(password.length).catch((error) => {
+        console.log(error);
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while generating the salt.`));
+        socket.close();
+        return;
+    });
 
     // (Encode username) + (hash password + salt)
-    try {
-        username_db = helper.base64encode(username);
-        password_db = helper.pbkdf2(password, salt);
-    } catch (err) {
-        console.log(err);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username or hashing/salting the password.`));
+    const username_db = await helper.base64encode(username).catch((error) => {
+        console.log(error);
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username.`));
         socket.close();
         return;
-    }
+    });
+    const password_db = await helper.pbkdf2(password, salt).catch((error) => {
+        console.log(error);
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
+        socket.close();
+        return;
+    });
 
-    // Insert username, password and salt hash into the database
-    try {
-        db.prepare("INSERT INTO login (username, password) VALUES (?, ?);").run(username_db, password_db);
-        salt_db.prepare("INSERT INTO main (username, salt) VALUES (?, ?);").run(username_db, salt);
-    } catch (err) {
-        console.log(err);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while inserting the username, password and salt into the database.`));
+    // Insert username, password hash and salt into the database
+    await helper.addUserToDatabase(username_db, password_db, salt).catch((error) => {
+        console.log(error);
+        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while inserting the username, password hash and salt into the database.`));
         socket.close();
         return;
-    }
+    });
 
     // Send success message
     socket.send(clientPublickey.encrypt(`REGI;;SUCCESS`));
