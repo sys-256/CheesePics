@@ -11,7 +11,7 @@ const login_db: mariadb.Connection = mariadb.createConnection({
     "database": "cheesepics"
 });
 
-const addUserToDatabase = async (username: string, password: string, salt: string): Promise<unknown> => {
+const addUserToDatabase = async (username: string, password: string, salt: string): Promise<any> => {
     return new Promise((resolve, reject) => {
         login_db.connect((error) => {
             if (error) {
@@ -29,7 +29,7 @@ const addUserToDatabase = async (username: string, password: string, salt: strin
     });
 }
 
-const checkUserExistsInDB = async (username: string): Promise<unknown> => {
+const checkUserExistsInDB = async (username: string): Promise<any> => {
     return new Promise((resolve, reject) => {
         login_db.connect((error) => {
             if (error) {
@@ -55,5 +55,30 @@ const checkUserExistsInDB = async (username: string): Promise<unknown> => {
     });
 }
 
+const getSaltFromDB = async (username: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        login_db.connect((error) => {
+            if (error) {
+                reject(`Error connecting to database: ${error}`);
+            }
+        })
+        login_db.query(`SELECT salt FROM login WHERE username='${username}';`, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            if (results.length === 0) {
+                reject("No salt found for username.");
+                return;
+            }
+            if (results.length > 1) {
+                reject("Multiple salts found for username.");
+                return;
+            }
+            resolve(results[0].salt);
+            login_db.end();
+        });
+    });
+}
 
-export { addUserToDatabase, checkUserExistsInDB };
+export { addUserToDatabase, checkUserExistsInDB, getSaltFromDB };
