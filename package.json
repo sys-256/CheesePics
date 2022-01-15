@@ -6,7 +6,6 @@
     "type": "module",
     "scripts": {
         "start": "node build/src/index.js",
-        "dev": "nodemon build/src/index.js",
         "build": "rm build/ -rf; tsc"
     },
     "repository": {
@@ -39,7 +38,6 @@
         "@types/express": "^4.17.13",
         "@types/memcached": "^2.2.7",
         "@types/node-forge": "^1.0.0",
-        "@types/ws": "^8.2.2",
-        "nodemon": "2.0.15"
+        "@types/ws": "^8.2.2"
     }
 }
