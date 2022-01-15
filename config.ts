@@ -5,6 +5,9 @@ export const config:any = {
         "user": "root",
         "password": "passwd"
     },
+    "sessions": {
+        "url": "./sessions.db"
+    },
     "port": {
         "http": 8030,
         "websocket": 8031
