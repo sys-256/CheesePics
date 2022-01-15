@@ -3,7 +3,7 @@ import { config } from "../../config.js";
 // Import packages
 import * as mariadb from "mysql";
 
-const login_db: mariadb.Connection = mariadb.createConnection({
+const login_db: mariadb.Pool = mariadb.createPool({
     "host": config.database.host,
     "port": config.database.port,
     "user": config.database.user,
@@ -13,31 +13,18 @@ const login_db: mariadb.Connection = mariadb.createConnection({
 
 const addUserToDatabase = async (username: string, password: string, salt: string): Promise<any> => {
     return new Promise((resolve, reject) => {
-        login_db.connect((error) => {
-            if (error) {
-                reject(`Error connecting to database: ${error}`);
-                return;
-            }
-        })
         login_db.query(`INSERT INTO login (username, password, salt) VALUES ('${username}', '${password}', '${salt}');`, (error, results) => {
             if (error) {
                 reject(error);
                 return;
             }
             resolve(results);
-            login_db.end();
         });
     });
 }
 
 const checkUserExistsInDB = async (username: string): Promise<any> => {
     return new Promise((resolve, reject) => {
-        login_db.connect((error) => {
-            if (error) {
-                reject(`Error connecting to database: ${error}`);
-                return;
-            }
-        })
         login_db.query(`SELECT username FROM login WHERE username='${username}';`, (error, results) => {
             if (error) {
                 reject(error);
@@ -52,19 +39,12 @@ const checkUserExistsInDB = async (username: string): Promise<any> => {
                 return;
             }
             resolve(true);
-            login_db.end();
         });
     });
 }
 
 const getSaltFromDB = async (username: string): Promise<any> => {
     return new Promise((resolve, reject) => {
-        login_db.connect((error) => {
-            if (error) {
-                reject(`Error connecting to database: ${error}`);
-                return;
-            }
-        })
         login_db.query(`SELECT salt FROM login WHERE username='${username}';`, (error, results) => {
             if (error) {
                 reject(error);
@@ -79,19 +59,12 @@ const getSaltFromDB = async (username: string): Promise<any> => {
                 return;
             }
             resolve(results[0].salt);
-            login_db.end();
         });
     });
 };
 
 const getPasswdByUsernameFromDB = async (username: string): Promise<any> => {
     return new Promise((resolve, reject) => {
-        login_db.connect((error) => {
-            if (error) {
-                reject(`Error connecting to database: ${error}`);
-                return;
-            }
-        })
         login_db.query(`SELECT password FROM login WHERE username='${username}';`, (error, results) => {
             if (error) {
                 reject(error);
@@ -106,7 +79,6 @@ const getPasswdByUsernameFromDB = async (username: string): Promise<any> => {
                 return;
             }
             resolve(results[0].password);
-            login_db.end();
         });
     });
 };
