@@ -49,7 +49,7 @@ app.get("/register", (request, response) => {
     });
 
     response.status(200).render("register.ejs", {
-        "ranNum": Math.floor(Math.random() * 496 + 1)
+        "contact": config.contact
     })
 });
 
