@@ -87,4 +87,4 @@ const startWSServer = () => {
     });
 };
 
-export { startWSServer as default };
+export { startWSServer };

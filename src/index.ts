@@ -10,7 +10,7 @@ const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port
 import cookie_parser from 'cookie-parser';
 
 import * as helper from "./helper.js";
-import startWSServer from "./websocket.js";
+import { startWSServer } from "./websocket.js";
 
 import express from "express";
 const app = express();
