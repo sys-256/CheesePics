@@ -29,6 +29,13 @@ app.set("view engine", "ejs"); // Set the view engine renderer to ejs
 app.set("views", "dynamic") // Set ejs directory
 
 app.get("/", (request, response) => {
+    /*console.log(request.cookies);
+    response.cookie("test", "test", {
+        "maxAge": 1000 * 60 * 60 * 24, // 1 day
+        "path": "/", // Use the cookie on all paths
+        "secure": true, // Only use the cookie over HTTPS
+        "httpOnly": true // Don't allowed to be messed with by client side JavaScript
+    });*/
     response.header({
         "Access-Control-Allow-Origin": "*", // Enable requests from all sites
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
