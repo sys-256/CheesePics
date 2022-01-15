@@ -6,8 +6,8 @@ import forge from 'node-forge';
 
 import crypto from "crypto";
 
-import { base64encode, base64decode, pbkdf2, generateSalt } from "./helpers/crypto";
-import { addUserToDatabase, checkUserExistsInDB, getSaltFromDB, getPasswdByUsernameFromDB } from "./helpers/mariadb";
+import { base64encode, base64decode, pbkdf2, generateSalt } from "./helpers/crypto.js";
+import { addUserToDatabase, checkUserExistsInDB, getSaltFromDB, getPasswdByUsernameFromDB } from "./helpers/mariadb.js";
 
 function generateSessionID(): string {
     return crypto.randomBytes(6).toString("hex");
