@@ -3,9 +3,8 @@ export { };
 import { config } from "../../config.js";
 
 // Import packages
-import Database from 'better-sqlite3'
-const db = new Database(config.database.main.url);
-const salt_db = new Database(config.database.salt.url);
+import Database from 'better-sqlite3';
+const sessionsDB = new Database(config.sessions.url);
 import forge from 'node-forge';
 import Memcached from "memcached";
 const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);

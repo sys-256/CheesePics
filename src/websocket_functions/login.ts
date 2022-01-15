@@ -3,9 +3,8 @@ export { };
 import { config } from "../../config.js";
 
 // Import packages
-import Database from 'better-sqlite3'
-const db = new Database(config.database.main.url);
-const salt_db = new Database(config.database.salt.url);
+import Database from 'better-sqlite3';
+const sessionsDB = new Database(config.sessions.url);
 import forge from 'node-forge';
 import Memcached from "memcached";
 const memcached: Memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
@@ -73,7 +72,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Check if there is a session with the same username
     try {
-        const result = db.prepare("SELECT * FROM sessions WHERE username=?").get(message[1]);
+        const result = sessionsDB.prepare("SELECT ID FROM sessions WHERE username=?").get(message[1]);
         if (result) {
             // Check if the session is valid
             if (result.expires > Date.now()) {
@@ -83,7 +82,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
             }
             // If the session is not valid, delete it
             else {
-                db.prepare("DELETE FROM sessions WHERE username=?").run(message[1]);
+                sessionsDB.prepare("DELETE FROM sessions WHERE username=?").run(message[1]);
             }
         }
     } catch (err) {
@@ -99,7 +98,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Insert the session key into the database
     try {
-        db.prepare("INSERT INTO sessions (id, username, expires) VALUES (?, ?, ?)").run(session_key, message[1], expires);
+        sessionsDB.prepare("INSERT INTO sessions (ID, username, expires) VALUES (?, ?, ?)").run(session_key, message[1], expires);
     } catch (err) {
         console.log(err);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while inserting the session key into the database.`));
