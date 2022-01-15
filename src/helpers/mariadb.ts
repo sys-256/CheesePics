@@ -16,6 +16,7 @@ const addUserToDatabase = async (username: string, password: string, salt: strin
         login_db.connect((error) => {
             if (error) {
                 reject(`Error connecting to database: ${error}`);
+                return;
             }
         })
         login_db.query(`INSERT INTO login (username, password, salt) VALUES ('${username}', '${password}', '${salt}');`, (error, results) => {
@@ -34,6 +35,7 @@ const checkUserExistsInDB = async (username: string): Promise<any> => {
         login_db.connect((error) => {
             if (error) {
                 reject(`Error connecting to database: ${error}`);
+                return;
             }
         })
         login_db.query(`SELECT username FROM login WHERE username='${username}';`, (error, results) => {
@@ -60,6 +62,7 @@ const getSaltFromDB = async (username: string): Promise<any> => {
         login_db.connect((error) => {
             if (error) {
                 reject(`Error connecting to database: ${error}`);
+                return;
             }
         })
         login_db.query(`SELECT salt FROM login WHERE username='${username}';`, (error, results) => {
@@ -79,6 +82,33 @@ const getSaltFromDB = async (username: string): Promise<any> => {
             login_db.end();
         });
     });
-}
+};
 
-export { addUserToDatabase, checkUserExistsInDB, getSaltFromDB };
+const getPasswdByUsernameFromDB = async (username: string): Promise<any> => {
+    return new Promise((resolve, reject) => {
+        login_db.connect((error) => {
+            if (error) {
+                reject(`Error connecting to database: ${error}`);
+                return;
+            }
+        })
+        login_db.query(`SELECT password FROM login WHERE username='${username}';`, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            if (results.length === 0) {
+                reject("No password found for username.");
+                return;
+            }
+            if (results.length > 1) {
+                reject("Multiple passwords found for username.");
+                return;
+            }
+            resolve(results[0].password);
+            login_db.end();
+        });
+    });
+};
+
+export { addUserToDatabase, checkUserExistsInDB, getSaltFromDB, getPasswdByUsernameFromDB };
