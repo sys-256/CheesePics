@@ -4,7 +4,7 @@ import { config } from "../../config.js";
 import * as mariadb from "mysql";
 
 const login_db: mariadb.Pool = mariadb.createPool({
-    "host": config.database.host,
+    "host": config.database.url,
     "port": config.database.port,
     "user": config.database.user,
     "password": config.database.password,
