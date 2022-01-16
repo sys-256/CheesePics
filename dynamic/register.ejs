@@ -55,7 +55,9 @@
     <input type="password" id="password-input" placeholder="Password" class="input" required><br><br>
     <button id="submit-input">Submit</button>
     <script>
-        const socket = new WebSocket("wss://amoamogus.ml/websocket");
+        const socket = new WebSocket("wss://cheesepics.xyz/websocket");
+        let usernameTries = 0;
+        let passwordTries = 0;
 
         let serverPublicKey;
 
@@ -85,7 +87,29 @@
                     window.location.href = "/";
                     return;
                 } else if (message[1] === "ERR") {
-                    console.log(`Failed to register. Error: ${message}`);
+                    if (message[3] === "The username doesn't match the critera.") {
+                        if (usernameTries < 10) {
+                            const username = btoa(document.getElementById("username-input").value);
+                            const password = btoa(document.getElementById("password-input").value);
+                            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`REGI;;${username};;${password}`)}`);
+                            usernameTries += 1;
+                        }
+                        else {
+                            console.log(`Failed to register. Error: ${message}`);
+                        }
+                    } else if (message[3] === "The password doesn't match the critera.") {
+                        if (passwordTries < 10) {
+                            const username = btoa(document.getElementById("username-input").value);
+                            const password = btoa(document.getElementById("password-input").value);
+                            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`REGI;;${username};;${password}`)}`);
+                            passwordTries += 1;
+                        }
+                        else {
+                            console.log(`Failed to register. Error: ${message}`);
+                        }
+                    } else {
+                        console.log(`Failed to register. Error: ${message}`);
+                    }
                 }
                 else {
                     console.log(`The server has sent an unknown message: ${message}`);
