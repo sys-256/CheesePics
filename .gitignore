@@ -16,3 +16,6 @@ public/images/
 
 # SQLTools
 **/*.session.sql
+
+# Sessions database
+sessions.db
