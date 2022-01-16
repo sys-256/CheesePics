@@ -1,4 +1,4 @@
-export const config:any = {
+export const config = {
     "database": {
         "url": "localhost",
         "port": 3306,
@@ -26,12 +26,16 @@ export const config:any = {
         "algorithm": "sha512"
         
     },
-    "session": {
-        "expires": 604800
-    },
     "memcached": {
-        "host": "localhost",
+        "url": "localhost",
         "port": 11211
     },
-    "contact": "Hoiboy19#0920 on Discord"
+    "contact": "Hoiboy19#0920 on Discord",
+    "cookies": {
+        "maxAge": 1000 * 60 * 60 * 24, // 1 day
+        "path": "/", // Use the cookie on all paths
+        "secure": true, // Only use the cookie over HTTPS
+        "httpOnly": true, // Don't allowed to be messed with by client side JavaScript
+        "sameSite": "strict", // Don't send the cookie to other sites
+    }
 }
