@@ -68,7 +68,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
         if (result) {
             // Check if the session is valid
             if (result.expires > Date.now()) {
-                socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${result.id}`));
+                socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${result.ID}`));
                 return;
             }
             // If the session is not valid, delete it
