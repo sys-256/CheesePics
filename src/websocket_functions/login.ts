@@ -16,12 +16,10 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while checking if the user exists.`));
-        socket.close();
         return;
     });
     if (!result) {
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;CLIENT;;The username or password is incorrect.`));
-        socket.close();
         return;
     }
 
@@ -29,7 +27,6 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const salt = await helper.getSaltFromDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while getting the salt from the database.`));
-        socket.close();
         return;
     });
 
@@ -37,13 +34,11 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const username = await helper.base64decode(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
-        socket.close();
         return;
     });
     const password = await helper.base64decode(message[2]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
-        socket.close();
         return;
     });
 
@@ -51,7 +46,6 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const password_compare = await helper.pbkdf2(password, salt).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
-        socket.close();
         return;
     });
 
@@ -59,25 +53,22 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const db_password = await helper.getPasswdByUsernameFromDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while getting the username and password from the database.`));
-        socket.close();
         return;
     });
 
     // Compare the username and password
     if (password_compare !== db_password) {
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;CLIENT;;The username or password is incorrect.`));
-        socket.close();
         return;
     }
 
     // Check if there is a session with the same username
     try {
-        const result = sessionsDB.prepare("SELECT ID FROM sessions WHERE username=?").get(message[1]);
+        const result = sessionsDB.prepare("SELECT ID, expires FROM sessions WHERE username=?").get(message[1]);
         if (result) {
             // Check if the session is valid
             if (result.expires > Date.now()) {
                 socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${result.id}`));
-                socket.close();
                 return;
             }
             // If the session is not valid, delete it
@@ -88,7 +79,6 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     } catch (err) {
         console.log(err);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while checking if there is a session with the same username.`));
-        socket.close();
         return;
     }
 
@@ -102,12 +92,10 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     } catch (err) {
         console.log(err);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while inserting the session key into the database.`));
-        socket.close();
         return;
     }
 
     // Send the session key to the client
-    socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${session_key}`));
-    socket.close();
+    socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${session_key}`))
     return;
 };
