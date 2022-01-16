@@ -94,7 +94,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Generate a random session key and when it expires
     const session_key = helper.generateSessionID();
-    const expires = Date.now() + config.session.expires;
+    const expires = Date.now() + config.cookies.maxAge;
 
     // Insert the session key into the database
     try {
