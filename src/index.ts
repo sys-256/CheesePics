@@ -29,15 +29,18 @@ app.set("view engine", "ejs"); // Set the view engine renderer to ejs
 app.set("views", "dynamic") // Set ejs directory
 
 app.get("/", (request, response) => {
-    response.header({
-        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
-        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
-        "X-Powered-By": "ur mom lmao"
-    });
+    if (request.cookies.sessionID) { }
+    else {
+        response.header({
+            "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+            "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+            "X-Powered-By": "ur mom lmao"
+        });
 
-    response.status(200).render("index.ejs", {
-        "ranNum": Math.floor(Math.random() * 496 + 1)
-    });
+        response.status(200).render("loggedOut/index.ejs", {
+            "ranNum": Math.floor(Math.random() * 496 + 1)
+        });
+    }
 });
 
 app.get("/register", (request, response) => {
@@ -47,7 +50,7 @@ app.get("/register", (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    response.status(200).render("register.ejs", {
+    response.status(200).render("loggedOut/register.ejs", {
         "contact": config.contact
     });
 });
@@ -59,7 +62,7 @@ app.get("/login", (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    response.status(200).render("login.ejs", {
+    response.status(200).render("loggedOut/login.ejs", {
         "contact": config.contact,
         "cookieMaxAge": config.cookies.maxAge
     });
