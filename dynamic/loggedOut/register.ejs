@@ -72,18 +72,17 @@
                 if (message[0] === "PUBLICKEY") {
                     serverPublicKey = forge.pki.publicKeyFromPem(message[1]);
                 } else {
-                    console.log(`The server has sent an unknown message: ${message}`);
+                    alert(`The server has sent an unknown message: ${message}`);
                     return;
                 }
             } else {
                 // Decrypt with keypair 
                 const message = keypair.privateKey.decrypt(event.data).split(";;");
                 if (message.length < 2 || message.length > 4 || message[0] !== "REGI") {
-                    console.log("An MITM attack has been detected. Please contact <%= contact %> as soon as possible.");
+                    alert("An MITM attack has been detected. Please contact <%= contact %> as soon as possible.");
                     return;
                 }
                 if (message[1] === "SUCCESS") {
-                    console.log("Successfully registered.");
                     window.location.href = "/";
                     return;
                 } else if (message[1] === "ERR") {
@@ -95,7 +94,7 @@
                             usernameTries += 1;
                         }
                         else {
-                            console.log(`Failed to register. Error: ${message}`);
+                            alert(`Failed to register. Error: ${message}`);
                         }
                     } else if (message[3] === "The password doesn't match the critera.") {
                         if (passwordTries < 10) {
@@ -105,14 +104,14 @@
                             passwordTries += 1;
                         }
                         else {
-                            console.log(`Failed to register. Error: ${message}`);
+                            alert(`Failed to register. Error: ${message}`);
                         }
                     } else {
-                        console.log(`Failed to register. Error: ${message}`);
+                        alert(`Failed to register. Error: ${message}`);
                     }
                 }
                 else {
-                    console.log(`The server has sent an unknown message: ${message}`);
+                    alert(`The server has sent an unknown message: ${message}`);
                     return;
                 }
             }
