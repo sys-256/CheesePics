@@ -11,7 +11,7 @@ const memcached: Memcached = new Memcached(`${config.memcached.url}:${config.mem
 
 import * as helper from "../helper.js";
 
-export const login = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey, serverKeypair: forge.pki.rsa.KeyPair) => {
+export const login = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
     // Check if the user exists
     const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
         console.log(error);
@@ -77,7 +77,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Insert the session key into the database
     try {
-        sessionsDB.prepare("INSERT INTO sessions (ID, username, expires, privkey) VALUES (?, ?, ?, ?)").run(session_key, message[1], expires, forge.pki.privateKeyToPem(serverKeypair.privateKey).replace(/(\r\n|\n|\r)/gm, ""));
+        sessionsDB.prepare("INSERT INTO sessions (ID, username, expires) VALUES (?, ?, ?)").run(session_key, message[1], expires);
     } catch (err) {
         console.log(err);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while inserting the session key into the database.`));

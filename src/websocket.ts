@@ -80,7 +80,7 @@ const startWSServer = () => {
                         return;
                     }
 
-                    login(socket, message, clientPublickey, keypair);
+                    login(socket, message, clientPublickey);
                 }
             });
         });

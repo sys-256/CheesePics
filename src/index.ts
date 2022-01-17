@@ -30,18 +30,16 @@ app.set("views", "dynamic") // Set ejs directory
 
 app.get("/", async (request, response) => {
     if (request.cookies.sessionID) {
-        const cookie = decodeURIComponent(request.cookies.sessionID);
         // Check if the sessionID is valid
-        const [usernameDecoded, encryptedSessionID]: string[] = (await helper.base64decode(cookie).catch()).split(";;");
-        const username = await helper.base64encode(usernameDecoded).catch();
-        const dbResult = sessionsDB.prepare(`SELECT ID, privkey FROM sessions WHERE username='${username}'`).all();
-        console.log(encryptedSessionID);
-        if (dbResult.length === 0 || dbResult.length > 1) {
+        const sessionID: string = request.cookies.sessionID;
+        const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
+        if (dbResult.length === 0 || dbResult.length > 1 || dbResult[0].expires < Date.now()) {
             response.clearCookie("sessionID");
         } else {
-            const privatekey = forge.pki.privateKeyFromPem(dbResult[0].privkey);
-            const sessionID = privatekey.decrypt(encryptedSessionID);
-            console.log(sessionID);
+            response.status(200).send({
+                "message": "elo u r logged in :smoel"
+            });
+            return;
         }
     }
     response.header({

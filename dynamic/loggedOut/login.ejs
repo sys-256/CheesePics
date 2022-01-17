@@ -84,19 +84,18 @@
                 if (message[1] === "SUCCESS") {
                     console.log("Successfully logged in.");
                     const rememberMe = document.getElementById("remember-me-input").checked;
-                    const cookieValue = btoa(btoa(`${document.getElementById("username-input").value};;${serverPublicKey.encrypt(message[2])}`));
                     if (rememberMe) {
-                        console.log(`/setCookie?value=${cookieValue}`);
+                        console.log(`/setCookie?value=${message[2]}`);
                         // Set the cookie
-                        await fetch(`/setCookie?value=${cookieValue}`);
+                        await fetch(`/setCookie?value=${message[2]}`);
 
                         // Redirect to the home page
                         //window.location.href = "/";
                         return;
                     } else {
                         // Set the cookie
-                        console.log(btoa(`${cookieValue}`))
-                        await fetch(`/setTempCookie?value=${cookieValue}`);
+                        console.log(btoa(`${message[2]}`))
+                        await fetch(`/setTempCookie?value=${message[2]}`);
 
                         // Redirect to the home page
                         //window.location.href = "/";
