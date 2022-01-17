@@ -77,6 +77,65 @@ app.get("/getCheeseLink", (request, response) => {
     });
 });
 
+app.get("/setCookie", (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    // Check if enough data was specified
+    if (!request.query.value) {
+        response.status(400).send({
+            "success": false,
+            "error": "Not enough data specified"
+        });
+        return;
+    }
+
+    response.cookie("sessionID", request.query.value, {
+        "maxAge": config.cookies.maxAge, // 1 day
+        "path": config.cookies.path, // Use the cookie on all paths
+        "secure": true, // Only use the cookie over HTTPS
+        "httpOnly": true, // Don't allowed to be messed with by client side JavaScript
+        "sameSite": "strict", // Don't send the cookie to other sites
+    });
+
+    response.status(200).send({
+        "success": true,
+        "error": undefined
+    });
+});
+
+app.get("/setTempCookie", (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    // Check if enough data was specified
+    if (!request.query.value) {
+        response.status(400).send({
+            "success": false,
+            "error": "Not enough data specified"
+        });
+        return;
+    }
+
+    response.cookie("sessionID", request.query.value, {
+        "path": config.cookies.path, // Use the cookie on all paths
+        "secure": true, // Only use the cookie over HTTPS
+        "httpOnly": true, // Don't allowed to be messed with by client side JavaScript
+        "sameSite": "strict", // Don't send the cookie to other sites
+    });
+
+    response.status(200).send({
+        "success": true,
+        "error": undefined
+    });
+});
+
 // Start the WebSocket server
 startWSServer();
 
