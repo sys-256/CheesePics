@@ -20,7 +20,7 @@ app.use(cookie_parser());
 app.use(express.static("public", { // Make images available
     "setHeaders": (response: any) => {
         response.set("Access-Control-Allow-Origin", "*"); // Enable requests from all sites
-        //response.set("Cache-Control", "public, max-age=604800, must-revalidate"); // Cache images for 1 week
+        response.set("Cache-Control", "public, max-age=604800, must-revalidate"); // Cache images for 1 week
         response.set("X-Powered-By", "ur mom lmao");
     }
 }));
@@ -28,19 +28,32 @@ app.use(express.static("public", { // Make images available
 app.set("view engine", "ejs"); // Set the view engine renderer to ejs
 app.set("views", "dynamic") // Set ejs directory
 
-app.get("/", (request, response) => {
-    if (request.cookies.sessionID) { }
-    else {
-        response.header({
-            "Access-Control-Allow-Origin": "*", // Enable requests from all sites
-            "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
-            "X-Powered-By": "ur mom lmao"
-        });
-
-        response.status(200).render("loggedOut/index.ejs", {
-            "ranNum": Math.floor(Math.random() * 496 + 1)
-        });
+app.get("/", async (request, response) => {
+    if (request.cookies.sessionID) {
+        const cookie = decodeURIComponent(request.cookies.sessionID);
+        // Check if the sessionID is valid
+        const [usernameDecoded, encryptedSessionID]: string[] = (await helper.base64decode(cookie).catch()).split(";;");
+        const username = await helper.base64encode(usernameDecoded).catch();
+        const dbResult = sessionsDB.prepare(`SELECT ID, privkey FROM sessions WHERE username='${username}'`).all();
+        console.log(encryptedSessionID);
+        if (dbResult.length === 0 || dbResult.length > 1) {
+            response.clearCookie("sessionID");
+        } else {
+            const privatekey = forge.pki.privateKeyFromPem(dbResult[0].privkey);
+            const sessionID = privatekey.decrypt(encryptedSessionID);
+            console.log(sessionID);
+        }
     }
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    response.status(200).render("loggedOut/index.ejs", {
+        "ranNum": Math.floor(Math.random() * 496 + 1)
+    });
+
 });
 
 app.get("/register", (request, response) => {

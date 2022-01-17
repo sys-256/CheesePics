@@ -84,22 +84,22 @@
                 if (message[1] === "SUCCESS") {
                     console.log("Successfully logged in.");
                     const rememberMe = document.getElementById("remember-me-input").checked;
+                    const cookieValue = btoa(btoa(`${document.getElementById("username-input").value};;${serverPublicKey.encrypt(message[2])}`));
                     if (rememberMe) {
-                        // Set a new date to expire in maxAge seconds
-                        const date = new Date();
-                        date.setTime(date.getTime() + maxAge);
-
+                        console.log(`/setCookie?value=${cookieValue}`);
                         // Set the cookie
-                        await fetch(`/setCookie?value=${message[2]}`);
+                        await fetch(`/setCookie?value=${cookieValue}`);
 
                         // Redirect to the home page
-                        window.location.href = "/";
+                        //window.location.href = "/";
                         return;
                     } else {
                         // Set the cookie
-                        await fetch(`/setTempCookie?value=${message[2]}`);
+                        console.log(btoa(`${cookieValue}`))
+                        await fetch(`/setTempCookie?value=${cookieValue}`);
 
                         // Redirect to the home page
+                        //window.location.href = "/";
                         return;
                     }
                 } else if (message[1] === "ERR") {

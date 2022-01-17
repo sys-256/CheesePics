@@ -11,7 +11,7 @@ const memcached: Memcached = new Memcached(`${config.memcached.url}:${config.mem
 
 import * as helper from "../helper.js";
 
-export const login = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
+export const login = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey, serverKeypair: forge.pki.rsa.KeyPair) => {
     // Check if the user exists
     const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
         console.log(error);
@@ -62,23 +62,12 @@ export const login = async (socket: any, message: string[], clientPublickey: for
         return;
     }
 
-    // Check if there is a session with the same username
+    // Delete previous sessions
     try {
-        const result = sessionsDB.prepare("SELECT ID, expires FROM sessions WHERE username=?").get(message[1]);
-        if (result) {
-            // Check if the session is valid
-            if (result.expires > Date.now()) {
-                socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${result.ID}`));
-                return;
-            }
-            // If the session is not valid, delete it
-            else {
-                sessionsDB.prepare("DELETE FROM sessions WHERE username=?").run(message[1]);
-            }
-        }
+        sessionsDB.prepare(`DELETE FROM sessions WHERE username='${message[1]}';`).run();
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while checking if there is a session with the same username.`));
+        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while deleted previous sessions.`));
         return;
     }
 
@@ -88,7 +77,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Insert the session key into the database
     try {
-        sessionsDB.prepare("INSERT INTO sessions (ID, username, expires) VALUES (?, ?, ?)").run(session_key, message[1], expires);
+        sessionsDB.prepare("INSERT INTO sessions (ID, username, expires, privkey) VALUES (?, ?, ?, ?)").run(session_key, message[1], expires, forge.pki.privateKeyToPem(serverKeypair.privateKey).replace(/(\r\n|\n|\r)/gm, ""));
     } catch (err) {
         console.log(err);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while inserting the session key into the database.`));
