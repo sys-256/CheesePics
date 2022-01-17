@@ -52,19 +52,21 @@
     </nav>
     <br><br>
     <input type="text" id="username-input" placeholder="Username" class="input" required><br>
-    <input type="password" id="password-input" placeholder="Password" class="input" required><br><br>
+    <input type="password" id="password-input" placeholder="Password" class="input" required><br>
+    <input type="checkbox" name="Remember me" id="remember-me-input">Remember me<br><br>
     <button id="submit-input">Submit</button>
     <script>
         const socket = new WebSocket("wss://cheesepics.xyz/websocket");
 
         let serverPublicKey;
+        const maxAge = parseInt("<%= cookieMaxAge %>");
 
         const keypair = forge.pki.rsa.generateKeyPair({
             "bits": 1024,
             "workers": -1
         });
 
-        socket.onmessage = (event) => {
+        socket.onmessage = async (event) => {
             if (event.data.length !== 128) { // Is plain text
                 const message = event.data.split(";;");
                 if (message[0] === "PUBLICKEY") {
@@ -74,8 +76,40 @@
                 }
             } else {
                 // Decrypt with keypair 
-                const message = keypair.privateKey.decrypt(event.data);
-                console.log(`Decrypted: ${message}`);
+                const message = keypair.privateKey.decrypt(event.data).split(";;");
+                if (message.length < 2 || message.length > 4 || message[0] !== "LOGI") {
+                    console.log("An MITM attack has been detected. Please contact <%= contact %> as soon as possible.");
+                    return;
+                }
+                if (message[1] === "SUCCESS") {
+                    console.log("Successfully logged in.");
+                    const rememberMe = document.getElementById("remember-me-input").checked;
+                    if (rememberMe) {
+                        // Set a new date to expire in maxAge seconds
+                        const date = new Date();
+                        date.setTime(date.getTime() + maxAge);
+
+                        // Set the cookie
+                        await fetch(`/setCookie?value=${message[2]}`);
+
+                        // Redirect to the home page
+                        window.location.href = "/";
+                        return;
+                    } else {
+                        // Set the cookie
+                        await fetch(`/setTempCookie?value=${message[2]}`);
+
+                        // Redirect to the home page
+                        return;
+                    }
+                } else if (message[1] === "ERR") {
+                    console.log(`Failed to register. Error: ${message}`);
+
+                }
+                else {
+                    console.log(`The server has sent an unknown message: ${message}`);
+                    return;
+                }
             }
         };
 
