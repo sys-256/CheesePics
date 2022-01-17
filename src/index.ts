@@ -29,14 +29,6 @@ app.set("view engine", "ejs"); // Set the view engine renderer to ejs
 app.set("views", "dynamic") // Set ejs directory
 
 app.get("/", (request, response) => {
-    console.log(request.cookies);
-    response.cookie("test", "test", {
-        "maxAge": config.cookies.maxAge, // 1 day
-        "path": config.cookies.path, // Use the cookie on all paths
-        "secure": config.cookies.secure, // Only use the cookie over HTTPS
-        "httpOnly": config.cookies.httpOnly, // Don't allowed to be messed with by client side JavaScript
-        "sameSite": "strict", // Don't send the cookie to other sites
-    });
     response.header({
         "Access-Control-Allow-Origin": "*", // Enable requests from all sites
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
@@ -45,7 +37,7 @@ app.get("/", (request, response) => {
 
     response.status(200).render("index.ejs", {
         "ranNum": Math.floor(Math.random() * 496 + 1)
-    })
+    });
 });
 
 app.get("/register", (request, response) => {
@@ -57,7 +49,7 @@ app.get("/register", (request, response) => {
 
     response.status(200).render("register.ejs", {
         "contact": config.contact
-    })
+    });
 });
 
 app.get("/login", (request, response) => {
@@ -68,8 +60,9 @@ app.get("/login", (request, response) => {
     });
 
     response.status(200).render("login.ejs", {
-        "ranNum": Math.floor(Math.random() * 496 + 1)
-    })
+        "contact": config.contact,
+        "cookieMaxAge": config.cookies.maxAge
+    });
 });
 
 app.get("/getCheeseLink", (request, response) => {
