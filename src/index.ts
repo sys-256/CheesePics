@@ -29,29 +29,54 @@ app.set("view engine", "ejs"); // Set the view engine renderer to ejs
 app.set("views", "dynamic") // Set ejs directory
 
 app.get("/", async (request, response) => {
-    if (request.cookies.sessionID) {
-        // Check if the sessionID is valid
-        const sessionID: string = request.cookies.sessionID;
-        const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
-        if (dbResult.length === 0 || dbResult.length > 1 || dbResult[0].expires < Date.now()) {
-            response.clearCookie("sessionID");
-        } else {
-            response.status(200).send({
-                "message": "elo u r logged in :smoel"
-            });
-            return;
-        }
-    }
     response.header({
         "Access-Control-Allow-Origin": "*", // Enable requests from all sites
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
         "X-Powered-By": "ur mom lmao"
     });
 
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+        // Check if the sessionID is valid
+        const sessionID: string = request.cookies.sessionID;
+        const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
+        if (dbResult.length === 0 || dbResult.length > 1 || dbResult[0].expires < Date.now()) {
+            response.clearCookie("sessionID");
+        } else {
+            response.status(200).render("loggedIn/index.ejs", {
+                "ranNum": Math.floor(Math.random() * 496 + 1)
+            });
+            return;
+        }
+    }
+
     response.status(200).render("loggedOut/index.ejs", {
         "ranNum": Math.floor(Math.random() * 496 + 1)
     });
 
+});
+
+app.get("/account", async (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+        // Check if the sessionID is valid
+        const sessionID: string = request.cookies.sessionID;
+        const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
+        if (dbResult.length === 0 || dbResult.length > 1 || dbResult[0].expires < Date.now()) {
+            response.clearCookie("sessionID");
+        } else {
+            response.status(200).render("loggedIn/account.ejs", {
+                "username": await helper.base64decode(dbResult[0].username).catch()
+            });
+            return;
+        }
+    }
+
+    response.status(200).render("logInToView.ejs", {});
 });
 
 app.get("/register", (request, response) => {
@@ -60,6 +85,21 @@ app.get("/register", (request, response) => {
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
         "X-Powered-By": "ur mom lmao"
     });
+
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+        // Check if the sessionID is valid
+        const sessionID: string = request.cookies.sessionID;
+        const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
+        if (dbResult.length === 0 || dbResult.length > 1 || dbResult[0].expires < Date.now()) {
+            response.clearCookie("sessionID");
+        } else {
+            response.status(200).render("logOutToView.ejs", {
+                "ranNum": Math.floor(Math.random() * 496 + 1)
+            });
+
+            return;
+        }
+    }
 
     response.status(200).render("loggedOut/register.ejs", {
         "contact": config.contact
@@ -72,6 +112,21 @@ app.get("/login", (request, response) => {
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
         "X-Powered-By": "ur mom lmao"
     });
+    
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+        // Check if the sessionID is valid
+        const sessionID: string = request.cookies.sessionID;
+        const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
+        if (dbResult.length === 0 || dbResult.length > 1 || dbResult[0].expires < Date.now()) {
+            response.clearCookie("sessionID");
+        } else {
+            response.status(200).render("logOutToView.ejs", {
+                "ranNum": Math.floor(Math.random() * 496 + 1)
+            });
+
+            return;
+        }
+    }
 
     response.status(200).render("loggedOut/login.ejs", {
         "contact": config.contact,
@@ -147,6 +202,20 @@ app.get("/setTempCookie", (request, response) => {
     response.status(200).send({
         "success": true,
         "error": undefined
+    });
+});
+
+app.get("/deleteCookie", (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
+    response.clearCookie("sessionID");
+
+    response.status(200).send({
+        "success": true
     });
 });
 
