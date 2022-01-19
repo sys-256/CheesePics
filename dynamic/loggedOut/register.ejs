@@ -95,6 +95,7 @@
                         }
                         else {
                             alert(`Failed to register. Error: ${message}`);
+                            usernameTries = 0;
                         }
                     } else if (message[3] === "The password doesn't match the critera.") {
                         if (passwordTries < 10) {
@@ -105,6 +106,7 @@
                         }
                         else {
                             alert(`Failed to register. Error: ${message}`);
+                            passwordTries = 0;
                         }
                     } else {
                         alert(`Failed to register. Error: ${message}`);
