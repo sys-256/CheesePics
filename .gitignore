@@ -18,4 +18,4 @@ public/images/
 **/*.session.sql
 
 # Sessions database
-sessions.db
+sessions.sqlite3

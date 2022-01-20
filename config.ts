@@ -6,7 +6,7 @@ export const config = {
         "password": "passwd"
     },
     "sessions": {
-        "url": "./sessions.db"
+        "url": "./sessions.sqlite3"
     },
     "port": {
         "http": 8030,
