@@ -2,8 +2,6 @@
 import { config } from "../config.js";
 
 // Import packages
-import forge from 'node-forge';
-
 import crypto from "crypto";
 
 import { base64encode, base64decode, pbkdf2, generateSalt } from "./helpers/crypto.js";
