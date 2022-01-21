@@ -1,4 +1,3 @@
-export { }
 // Get variables from config.json
 import { config } from "../config.js";
 
@@ -6,15 +5,13 @@ import { config } from "../config.js";
 import Database from 'better-sqlite3';
 const sessionsDB = new Database(config.sessions.url);
 import forge from 'node-forge';
-import Memcached from "memcached";
-const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
 import { WebSocketServer } from 'ws'
 
 import * as helper from "./helper";
 import { login } from "./websocket_functions/login.js";
 import { register } from "./websocket_functions/register.js";
 
-const startWSServer = () => {
+export const startWSServer = () => {
     const ws = new WebSocketServer({ port: config.port.websocket }, async () => {
         console.log(`Listening for WebSocket connections on port ${config.port.websocket}`);
     });
@@ -86,5 +83,3 @@ const startWSServer = () => {
         });
     });
 };
-
-export { startWSServer };

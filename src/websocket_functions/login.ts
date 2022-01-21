@@ -1,4 +1,3 @@
-export { };
 // Get variables from config.json
 import { config } from "../../config.js";
 
@@ -6,8 +5,6 @@ import { config } from "../../config.js";
 import Database from 'better-sqlite3';
 const sessionsDB = new Database(config.sessions.url);
 import forge from 'node-forge';
-import Memcached from "memcached";
-const memcached: Memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
 
 import * as helper from "../helper.js";
 

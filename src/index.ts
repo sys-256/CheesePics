@@ -5,9 +5,7 @@ import { config } from "../config.js";
 import Database from 'better-sqlite3';
 const sessionsDB = new Database(config.sessions.url);
 import forge from 'node-forge';
-import Memcached from "memcached";
-const memcached = new Memcached(`${config.memcached.url}:${config.memcached.port}`);
-import cookie_parser from 'cookie-parser';
+import cookie_parser from "cookie-parser";
 
 import * as helper from "./helper.js";
 import { startWSServer } from "./websocket.js";
@@ -15,10 +13,11 @@ import { startWSServer } from "./websocket.js";
 import express from "express";
 const app = express();
 
+// Parse cookies
 app.use(cookie_parser());
 
 app.use(express.static("public", { // Make images available
-    "setHeaders": (response: any) => {
+    "setHeaders": (response) => {
         response.set("Access-Control-Allow-Origin", "*"); // Enable requests from all sites
         response.set("Cache-Control", "public, max-age=604800, must-revalidate"); // Cache images for 1 week
         response.set("X-Powered-By", "ur mom lmao");
@@ -112,7 +111,7 @@ app.get("/login", (request, response) => {
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
         "X-Powered-By": "ur mom lmao"
     });
-    
+
     if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
         // Check if the sessionID is valid
         const sessionID: string = request.cookies.sessionID;
