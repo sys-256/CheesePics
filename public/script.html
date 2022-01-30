@@ -16,7 +16,7 @@
     <input type="password" id="password-input" placeholder="Password" class="input" required><br><br>
     <button id="submit-input">Submit</button>
     <script>
-        const socket = new WebSocket("wss://amoamogus.ml/websocket");
+        const socket = new WebSocket("wss://cheesepics.xyz/websocket");
 
         let serverPublicKey;
 
@@ -41,9 +41,7 @@
         };
 
         document.getElementById("submit-input").addEventListener("click", () => {
-            const username = btoa(document.getElementById("username-input").value);
-            const password = btoa(document.getElementById("password-input").value);
-            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`LOGI;;${username};;${password}`)}`);
+            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`ICON;;sus;;amogus`)}::base64==`);
         });
     </script>
 </body>
