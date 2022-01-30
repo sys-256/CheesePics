@@ -24,12 +24,12 @@ export const register = async (socket: any, message: string[], clientPublickey: 
     const username = await helper.base64decode(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
-        return;
+        return "";
     });
     const password = await helper.base64decode(message[2]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
-        return;
+        return "";
     });
 
     username.replace(/(\r\n|\n|\r)/gm, "");
@@ -55,19 +55,19 @@ export const register = async (socket: any, message: string[], clientPublickey: 
     const salt = await helper.generateSalt(password.length).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while generating the salt.`));
-        return;
+        return "";
     });
 
     // (Encode username) + (hash password + salt)
     const username_db = await helper.base64encode(username).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username.`));
-        return;
+        return "";
     });
     const password_db = await helper.pbkdf2(password, salt).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
-        return;
+        return "";
     });
 
     // Insert username, password hash and salt into the database
