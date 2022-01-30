@@ -29,12 +29,10 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Base64 decode the username and password
     const username = await helper.base64decode(message[1]).catch((error) => {
-        console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
         return "";
     });
     const password = await helper.base64decode(message[2]).catch((error) => {
-        console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
         return "";
     });

@@ -22,12 +22,10 @@ export const register = async (socket: any, message: string[], clientPublickey: 
 
     // Base64 decode the username and password
     const username = await helper.base64decode(message[1]).catch((error) => {
-        console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
         return "";
     });
     const password = await helper.base64decode(message[2]).catch((error) => {
-        console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
         return "";
     });
@@ -60,7 +58,6 @@ export const register = async (socket: any, message: string[], clientPublickey: 
 
     // (Encode username) + (hash password + salt)
     const username_db = await helper.base64encode(username).catch((error) => {
-        console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username.`));
         return "";
     });
