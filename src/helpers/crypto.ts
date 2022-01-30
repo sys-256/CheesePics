@@ -9,7 +9,7 @@ import crypto from "crypto";
 function base64decode(message: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const result = Buffer.from(message, "base64").toString("utf-8");
-        if (!result || result === "") {
+        if (!result) {
             reject("Error decoding base64.");
             return;
         }
@@ -20,7 +20,7 @@ function base64decode(message: string): Promise<string> {
 function base64encode(message: string): Promise<string> {
     return new Promise((resolve, reject) => {
         const result = Buffer.from(message, "utf-8").toString("base64");
-        if (!result || result === "") {
+        if (!result) {
             reject("Error decoding base64.");
             return;
         }
