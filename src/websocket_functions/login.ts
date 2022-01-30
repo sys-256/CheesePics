@@ -30,26 +30,26 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     // Base64 decode the username and password
     const username = await helper.base64decode(message[1]).catch((error) => {
         console.log(error);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
+        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
         return;
     });
     const password = await helper.base64decode(message[2]).catch((error) => {
         console.log(error);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
+        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
         return;
     });
 
     // (Encode username) + (hash password + salt)
     const password_compare = await helper.pbkdf2(password, salt).catch((error) => {
         console.log(error);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
+        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
         return;
     });
 
     // Get username and password from database
     const db_password = await helper.getPasswdByUsernameFromDB(message[1]).catch((error) => {
         console.log(error);
-        socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while getting the username and password from the database.`));
+        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while getting the username and password from the database.`));
         return;
     });
 
