@@ -13,7 +13,7 @@ export const register = async (socket: any, message: string[], clientPublickey: 
     const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while checking if the user already exists.`));
-        return;
+        return true;
     });
     if (result) {
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;CLIENT;;This username is already taken.`));

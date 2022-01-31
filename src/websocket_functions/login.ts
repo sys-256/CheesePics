@@ -13,7 +13,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while checking if the user exists.`));
-        return;
+        return false;
     });
     if (!result) {
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;CLIENT;;The username or password is incorrect.`));
@@ -24,7 +24,7 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const salt = await helper.getSaltFromDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while getting the salt from the database.`));
-        return;
+        return "";
     });
 
     // Base64 decode the username and password

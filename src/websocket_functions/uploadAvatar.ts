@@ -24,7 +24,7 @@ export const uploadAvatar = async (socket: any, message: string[], clientPublick
     const salt = await helper.getSaltFromDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`ICON;;ERR;;SERVER;;An error occurred while getting the salt from the database.`));
-        return;
+        return "";
     });
 
     // Base64 decode the username and password
@@ -41,7 +41,7 @@ export const uploadAvatar = async (socket: any, message: string[], clientPublick
     const password_compare = await helper.pbkdf2(password, salt).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`ICON;;ERR;;SERVER;;An error occurred while hashing the password.`));
-        return;
+        return "";
     });
 
     // Get username and password from database
