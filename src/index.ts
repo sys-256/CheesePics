@@ -69,7 +69,7 @@ app.get("/account", async (request, response) => {
             response.clearCookie("sessionID");
         } else {
             response.status(200).render("loggedIn/account.ejs", {
-                "username": await helper.base64decode(dbResult[0].username).catch()
+                "username": await new helper.base64(dbResult[0].username).decode().catch()
             });
             return;
         }

@@ -28,11 +28,11 @@ export const uploadAvatar = async (socket: any, message: string[], clientPublick
     });
 
     // Base64 decode the username and password
-    const username = await helper.base64decode(message[1]).catch((error) => {
+    const username = await new helper.base64(message[1]).decode().catch((error) => {
         socket.send(clientPublickey.encrypt(`ICON;;ERR;;SERVER;;An error occurred while decoding the username.`));
         return "";
     });
-    const password = await helper.base64decode(message[2]).catch((error) => {
+    const password = await new helper.base64(message[2]).decode().catch((error) => {
         socket.send(clientPublickey.encrypt(`ICON;;ERR;;SERVER;;An error occurred while decoding the password.`));
         return "";
     });
@@ -57,5 +57,6 @@ export const uploadAvatar = async (socket: any, message: string[], clientPublick
         return;
     }
 
-    
+    // Supported file type are png, jpg, jpeg, gif
+    const fileType = imageData.split(",")[0].split(";")[0].split("/")[1];;  
 }
