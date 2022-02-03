@@ -13,7 +13,7 @@ export const config = {
         "websocket": 8031
     },
     "regex": {
-        "username": /^[A-Za-z0-9_-\p{L}]{3,15}$/g,
+        "username": /^[A-Za-z0-9_-]{3,15}$/g,
         "password": /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&_])[A-Za-z\d$@$!%*?&_]{8,40}$/g
     },
     "rsa": {
