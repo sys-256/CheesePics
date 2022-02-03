@@ -57,7 +57,7 @@ export const register = async (socket: any, message: string[], clientPublickey: 
     });
 
     // (Encode username) + (hash password + salt)
-    const username_db = await new helper.base64(username).decode().catch((error) => {
+    const username_db = await new helper.base64(username).encode().catch((error) => {
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username.`));
         return "";
     });
