@@ -6,7 +6,8 @@
     "type": "module",
     "scripts": {
         "start": "node build/src/index.js",
-        "build": "rm build/ -rf; tsc"
+        "build": "rm build/ -rf; tsc",
+        "build-windows": "rmdir build /s /q & tsc"
     },
     "repository": {
         "type": "git",
