@@ -61,7 +61,13 @@ app.get("/", async (request, response) => {
 
 });
 
-app.get("/test", async (request, response) => {
+app.get("/api", async (request, response) => {
+    response.header({
+        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
+        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
+        "X-Powered-By": "ur mom lmao"
+    });
+
     response.send((await helper.getRandomImage()));
 });
 
