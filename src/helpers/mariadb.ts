@@ -83,19 +83,11 @@ const getPasswdByUsernameFromDB = async (username: string): Promise<string> => {
     });
 };
 
-const getRandomImage = (): Promise<string[]> => {
+const getRandomImage = async (): Promise<string[]> => {
     return new Promise((resolve, reject) => {
         login_db.query(`SELECT ID, license, author FROM images ORDER BY RAND() LIMIT 1;`, (error, results) => {
             if (error) {
                 reject(error);
-                return;
-            }
-            if (results.length === 0) {
-                reject("No images found.");
-                return;
-            }
-            if (results.length > 1) {
-                reject("Multiple images found.");
                 return;
             }
             resolve([results[0].ID, results[0].license, results[0].author]);
