@@ -53,18 +53,7 @@
     <div class="image-div">
         <img src="/images/cheese/<%= imageID %>" alt="Cheese" id="cheese-img"><br>
         <p>&copy; <%= author %> - <%= license %></p>
-        <button id="like">like image</button>
     </div>
-
-    <script>
-        const button = document.querySelector("#like");
-        button.addEventListener("click", (event) => {
-            const randomBool = Math.random() > 0.5 ? true : false;
-            if (randomBool) {
-                window.location.href = "https://www.youtube.com/watch?v=a3Z7zEc7AXQ";
-            }
-        });
-    </script>
 </body>
 
 </html>
