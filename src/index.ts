@@ -10,7 +10,7 @@ import cookie_parser from "cookie-parser";
 import * as helper from "./helper.js";
 import { startWSServer } from "./websocket.js";
 
-import express from "express";
+import express, { response } from "express";
 const app = express();
 
 // Parse cookies
@@ -34,6 +34,9 @@ app.get("/", async (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
+    // Get a image entry from the database
+    const image = await helper.getRandomImage();
+
     if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
         // Check if the sessionID is valid
         const sessionID: string = request.cookies.sessionID;
@@ -42,16 +45,24 @@ app.get("/", async (request, response) => {
             response.clearCookie("sessionID");
         } else {
             response.status(200).render("loggedIn/index.ejs", {
-                "ranNum": Math.floor(Math.random() * 496 + 1)
+                "imageID": image[0],
+                "license": image[1],
+                "author": image[2],
             });
             return;
         }
     }
 
     response.status(200).render("loggedOut/index.ejs", {
-        "ranNum": Math.floor(Math.random() * 496 + 1)
+        "imageID": image[0],
+        "license": image[1],
+        "author": image[2],
     });
 
+});
+
+app.get("/test", async (request, response) => {
+    response.send((await helper.getRandomImage()));
 });
 
 app.get("/account", async (request, response) => {
