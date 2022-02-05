@@ -10,7 +10,7 @@ import cookie_parser from "cookie-parser";
 import * as helper from "./helper.js";
 import { startWSServer } from "./websocket.js";
 
-import express, { response } from "express";
+import express from "express";
 const app = express();
 
 // Parse cookies
@@ -68,7 +68,7 @@ app.get("/api", async (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    response.send((await helper.getRandomImage()));
+    response.status(200).send((await helper.getRandomImage()));
 });
 
 app.get("/account", async (request, response) => {
