@@ -1,6 +1,6 @@
 export const config = {
     "database": {
-        "url": "localhost",
+        "url": "192.168.2.15",
         "port": 3306,
         "user": "root",
         "password": "passwd"
@@ -25,10 +25,6 @@ export const config = {
         "keyLength": 128,
         "algorithm": "sha512"
         
-    },
-    "memcached": {
-        "url": "localhost",
-        "port": 11211
     },
     "contact": "Hoiboy19#0920 on Discord",
     "cookies": {

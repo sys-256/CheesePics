@@ -8,7 +8,7 @@ CREATE TABLE `login` (
     `password` CHAR(128) NOT NULL,
     `salt` TEXT NOT NULL,
     `liked` TEXT DEFAULT NULL,
-    `pfp` CHAR(68) DEFAULT NULL, -- 64 for sha256 hash + 4 for extension
+    `pfp` CHAR(68) DEFAULT NULL -- 64 for sha256 hash + 4 for extension
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Create the images table
