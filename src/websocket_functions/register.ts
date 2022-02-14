@@ -10,7 +10,7 @@ import * as helper from "../helper.js";
 
 export const register = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
     // Check if the user already exists in the database
-    const result = await helper.checkUserExistsInDB(message[1]).catch((error) => {
+    const result = await helper.mariadb.checkUserExistsInDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while checking if the user already exists.`));
         return true;
@@ -21,11 +21,11 @@ export const register = async (socket: any, message: string[], clientPublickey: 
     }
 
     // Base64 decode the username and password
-    const username = await new helper.base64(message[1]).decode().catch((error) => {
+    const username = await new helper.crypto.base64(message[1]).decode().catch((error) => {
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
         return "";
     });
-    const password = await new helper.base64(message[2]).decode().catch((error) => {
+    const password = await new helper.crypto.base64(message[2]).decode().catch((error) => {
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
         return "";
     });
@@ -50,25 +50,25 @@ export const register = async (socket: any, message: string[], clientPublickey: 
     }
 
     // Generate salt
-    const salt = await helper.generateSalt(password.length).catch((error) => {
+    const salt = await helper.crypto.generateSalt(password.length).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while generating the salt.`));
         return "";
     });
 
     // (Encode username) + (hash password + salt)
-    const username_db = await new helper.base64(username).encode().catch((error) => {
+    const username_db = await new helper.crypto.base64(username).encode().catch((error) => {
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while encoding the username.`));
         return "";
     });
-    const password_db = await helper.pbkdf2(password, salt).catch((error) => {
+    const password_db = await helper.crypto.pbkdf2(password, salt).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
         return "";
     });
 
     // Insert username, password hash and salt into the database
-    await helper.addUserToDatabase(username_db, password_db, salt).catch((error) => {
+    await helper.mariadb.addUserToDatabase(username_db, password_db, salt).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`REGI;;ERR;;SERVER;;An error occurred while inserting the username, password hash and salt into the database.`));
         return;

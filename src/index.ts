@@ -35,7 +35,7 @@ app.get("/", async (request, response) => {
     });
 
     // Get a image entry from the database
-    const image = await helper.getRandomImage();
+    const image = await helper.mariadb.getRandomImage();
 
     if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
         // Check if the sessionID is valid
@@ -68,7 +68,7 @@ app.get("/api", async (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    response.status(200).send((await helper.getRandomImage()));
+    response.status(200).send((await helper.mariadb.getRandomImage()));
 });
 
 app.get("/account", async (request, response) => {
@@ -86,7 +86,7 @@ app.get("/account", async (request, response) => {
             response.clearCookie("sessionID");
         } else {
             response.status(200).render("loggedIn/account.ejs", {
-                "username": await new helper.base64(dbResult[0].username).decode().catch()
+                "username": await new helper.crypto.base64(dbResult[0].username).decode().catch()
             });
             return;
         }
