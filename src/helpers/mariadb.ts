@@ -3,7 +3,7 @@ import { config } from "../../config.js";
 // Import packages
 import * as mariadb from "mysql";
 
-const login_db: mariadb.Pool = mariadb.createPool({
+const database: mariadb.Pool = mariadb.createPool({
     "host": config.database.url,
     "port": config.database.port,
     "user": config.database.user,
@@ -13,7 +13,7 @@ const login_db: mariadb.Pool = mariadb.createPool({
 
 const addUserToDatabase = async (username: string, password: string, salt: string): Promise<string[] | string> => {
     return new Promise((resolve, reject) => {
-        login_db.query(`INSERT INTO login (username, password, salt) VALUES ('${username}', '${password}', '${salt}');`, (error, results) => {
+        database.query(`INSERT INTO login (username, password, salt) VALUES ('${username}', '${password}', '${salt}');`, (error, results) => {
             if (error) {
                 reject(error);
                 return;
@@ -25,7 +25,7 @@ const addUserToDatabase = async (username: string, password: string, salt: strin
 
 const checkUserExistsInDB = async (username: string): Promise<boolean | string> => {
     return new Promise((resolve, reject) => {
-        login_db.query(`SELECT username FROM login WHERE username='${username}';`, (error, results) => {
+        database.query(`SELECT username FROM login WHERE username='${username}';`, (error, results) => {
             if (error) {
                 reject(error);
                 return;
@@ -45,7 +45,7 @@ const checkUserExistsInDB = async (username: string): Promise<boolean | string> 
 
 const getSaltFromDB = async (username: string): Promise<string> => {
     return new Promise((resolve, reject) => {
-        login_db.query(`SELECT salt FROM login WHERE username='${username}';`, (error, results) => {
+        database.query(`SELECT salt FROM login WHERE username='${username}';`, (error, results) => {
             if (error) {
                 reject(error);
                 return;
@@ -65,7 +65,7 @@ const getSaltFromDB = async (username: string): Promise<string> => {
 
 const getPasswdByUsernameFromDB = async (username: string): Promise<string> => {
     return new Promise((resolve, reject) => {
-        login_db.query(`SELECT password FROM login WHERE username='${username}';`, (error, results) => {
+        database.query(`SELECT password FROM login WHERE username='${username}';`, (error, results) => {
             if (error) {
                 reject(error);
                 return;
@@ -83,16 +83,34 @@ const getPasswdByUsernameFromDB = async (username: string): Promise<string> => {
     });
 };
 
-const getRandomImage = async (): Promise<string[]> => {
+const getRandomImage = async (): Promise<{ ID: string, license: string, author: string}> => {
     return new Promise((resolve, reject) => {
-        login_db.query(`SELECT ID, license, author FROM images ORDER BY RAND() LIMIT 1;`, (error, results) => {
+        database.query(`SELECT ID, license, author FROM images ORDER BY RAND() LIMIT 1;`, (error, results) => {
             if (error) {
                 reject(error);
                 return;
             }
-            resolve([results[0].ID, results[0].license, results[0].author]);
+            resolve(results[0]);
         });
     });
 };
 
-export { addUserToDatabase, checkUserExistsInDB, getSaltFromDB, getPasswdByUsernameFromDB, getRandomImage };
+const checkImageExists = async (image: string): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+        database.query(`SELECT ID FROM images WHERE ID=${image}`, (error, results) => {
+            if (error) {
+                reject(error);
+                return;
+            }
+            
+            if (results.length === 0) {
+                resolve(false);
+            } else {
+                resolve(true);
+            }
+            return;
+        });
+    });
+};
+
+export { addUserToDatabase, checkUserExistsInDB, getSaltFromDB, getPasswdByUsernameFromDB, getRandomImage, checkImageExists };

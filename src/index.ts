@@ -45,18 +45,18 @@ app.get("/", async (request, response) => {
             response.clearCookie("sessionID");
         } else {
             response.status(200).render("loggedIn/index.ejs", {
-                "imageID": image[0],
-                "license": image[1],
-                "author": image[2],
+                "imageID": image.ID,
+                "license": image.license,
+                "author": image.author,
             });
             return;
         }
     }
 
     response.status(200).render("loggedOut/index.ejs", {
-        "imageID": image[0],
-        "license": image[1],
-        "author": image[2],
+        "imageID": image.ID,
+        "license": image.license,
+        "author": image.author,
     });
 
 });
@@ -147,18 +147,6 @@ app.get("/login", (request, response) => {
     response.status(200).render("loggedOut/login.ejs", {
         "contact": config.contact,
         "cookieMaxAge": config.cookies.maxAge
-    });
-});
-
-app.get("/getCheeseLink", (request, response) => {
-    response.header({
-        "Access-Control-Allow-Origin": "*", // Enable requests from all sites
-        "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
-        "X-Powered-By": "ur mom lmao"
-    });
-
-    response.status(200).send({
-        "link": helper.getCheeseLink()
     });
 });
 
