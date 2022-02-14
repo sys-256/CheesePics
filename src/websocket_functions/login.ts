@@ -24,18 +24,20 @@ export const login = async (socket: any, message: string[], clientPublickey: for
     const salt = await helper.getSaltFromDB(message[1]).catch((error) => {
         console.log(error);
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while getting the salt from the database.`));
-        return "";
+        return undefined;
     });
 
     // Base64 decode the username and password
     const username = await new helper.base64(message[1]).decode().catch((error) => {
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
-        return "";
+        return undefined;
     });
     const password = await new helper.base64(message[2]).decode().catch((error) => {
         socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
-        return "";
+        return undefined;
     });
+
+    if (salt === undefined || username === undefined || password === undefined) return;
 
     // (Encode username) + (hash password + salt)
     const password_compare = await helper.pbkdf2(password, salt).catch((error) => {
