@@ -8,7 +8,7 @@ import * as crypto from "./helpers/crypto.js";
 import * as mariadb from "./helpers/mariadb.js";
 
 function generateSessionID(): string {
-    return randomBytes(6).toString("hex");
+    return randomBytes(12).toString("hex");
 }
 
 export { crypto, mariadb, generateSessionID };
