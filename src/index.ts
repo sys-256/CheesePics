@@ -209,7 +209,7 @@ app.get("/setTempCookie", (request, response) => {
     });
 });
 
-app.get("/deleteCookie", (request, response) => {
+app.get("/logout", (request, response) => {
     response.header({
         "Access-Control-Allow-Origin": "*", // Enable requests from all sites
         "Cache-Control": "no-cache, no-store, must-revalidate", // Disable caching
@@ -218,9 +218,7 @@ app.get("/deleteCookie", (request, response) => {
 
     response.clearCookie("sessionID");
 
-    response.status(200).send({
-        "success": true
-    });
+    response.status(302).redirect("/");
 });
 
 // Start the WebSocket server

@@ -21,7 +21,9 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 
     <!-- SEO -->
-    <title><%= username %>'s account | CheesePics</title>
+    <title>
+        <%= username %>'s account | CheesePics
+    </title>
     <meta name="description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
     <meta name="author" content="sys-256 (Bram)">
     <meta name="keywords" content="cheese, Cheese, CheesePics, cheesepics, CheesePics.xyz, cheesepics.xyz">
@@ -50,6 +52,15 @@
         </h1>
     </nav>
     <br><br>
+    <center>
+        <button id="logout">Log out</button>
+    </center>
+
+    <script>
+        document.getElementById("logout").addEventListener("click", function() {
+            window.location.href = "/logout";
+        });
+    </script>
 </body>
 
 </html>
