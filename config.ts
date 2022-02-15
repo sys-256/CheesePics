@@ -22,7 +22,7 @@ export const config = {
     },
     "pbkdf2": {
         "iterations": 25000,
-        "keyLength": 128,
+        "keyLength": 125,
         "algorithm": "sha512"
         
     },

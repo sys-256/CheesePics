@@ -5,7 +5,7 @@ USE cheesepics;
 -- Create the login table
 CREATE TABLE `login` (
     `username` TEXT NOT NULL,
-    `password` CHAR(128) NOT NULL,
+    `password` CHAR(250) NOT NULL,
     `salt` TEXT NOT NULL,
     `liked` TEXT DEFAULT NULL,
     `pfp` CHAR(68) DEFAULT NULL -- 64 for sha256 hash + 4 for extension
