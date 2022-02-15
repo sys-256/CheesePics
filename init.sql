@@ -7,7 +7,7 @@ CREATE TABLE `login` (
     `username` TEXT NOT NULL,
     `password` CHAR(250) NOT NULL,
     `salt` TEXT NOT NULL,
-    `liked` TEXT DEFAULT NULL,
+    `liked` TEXT NOT NULL,
     `pfp` CHAR(68) DEFAULT NULL -- 64 for sha256 hash + 4 for extension
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 

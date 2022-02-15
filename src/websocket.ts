@@ -11,6 +11,7 @@ import * as helper from "./helper";
 import { login } from "./websocket_functions/login.js";
 import { register } from "./websocket_functions/register.js";
 import { uploadAvatar } from "./websocket_functions/uploadAvatar.js";
+import { like, unlike } from "./websocket_functions/likes.js";
 
 export const startWSServer = () => {
     const ws = new WebSocketServer({ port: config.port.websocket }, async () => {
@@ -93,13 +94,33 @@ export const startWSServer = () => {
                 }
                 if (message[0] === "ICON" && pfp_data) {
                     // Check if the message enough info
-                    if (message.length !== 2) {
+                    if (message.length !== 3) {
                         socket.send(`ERR;;CLIENT;;Specify (only) a method, username and password.`);
                         socket.close();
                         return;
                     }
 
                     uploadAvatar(socket, message, clientPublickey, pfp_data);
+                }
+                if (message[0].split("::")[0] === "LIKE") {
+                    // Check if the message enough info
+                    if (message.length !== 3) {
+                        socket.send(`ERR;;CLIENT;;Specify (only) a method, username and password.`);
+                        socket.close();
+                        return;
+                    }
+
+                    like(socket, message, clientPublickey);
+                }
+                if (message[0].split("::")[0] === "UNLIKE") {
+                    // Check if the message enough info
+                    if (message.length !== 3) {
+                        socket.send(`ERR;;CLIENT;;Specify (only) a method, username and password.`);
+                        socket.close();
+                        return;
+                    }
+
+                    unlike(socket, message, clientPublickey);
                 }
             });
         });

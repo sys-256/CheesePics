@@ -41,7 +41,9 @@
         };
 
         document.getElementById("submit-input").addEventListener("click", () => {
-            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`ICON;;sus;;amogus`)}::base64==`);
+            const username = document.getElementById("username-input").value;
+            const password = document.getElementById("password-input").value;
+            socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`UNLIKE::433dda72bad04847a5cc31fd46e3a1b4.jpg;;${btoa(username)};;${btoa(password)}`)}`);
         });
     </script>
 </body>
