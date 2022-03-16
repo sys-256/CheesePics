@@ -7,6 +7,7 @@
     "scripts": {
         "start": "node build/src/index.js",
         "build": "rm build/ -rf; tsc",
+        "format": "prettier -w src/**/*.{ts,js}",
         "build-windows": "rmdir build /s /q & tsc"
     },
     "repository": {
@@ -30,6 +31,7 @@
         "express": "^4.17.3",
         "mysql": "^2.18.1",
         "node-forge": "^1.2.1",
+        "prettier": "^2.6.0",
         "typescript": "^4.6.2",
         "ws": "^8.5.0"
     },

@@ -2,69 +2,124 @@
 import { config } from "../../config.js";
 
 // Import packages
-import Database from 'better-sqlite3';
+import Database from "better-sqlite3";
 const sessionsDB = new Database(config.sessions.url);
-import forge from 'node-forge';
+import forge from "node-forge";
 
 import * as helper from "../helper.js";
 
-export const login = async (socket: any, message: string[], clientPublickey: forge.pki.rsa.PublicKey) => {
+export const login = async (
+    socket: any,
+    message: string[],
+    clientPublickey: forge.pki.rsa.PublicKey,
+) => {
     // Check if the user exists
-    const result = await helper.mariadb.checkUserExistsInDB(message[1]).catch((error) => {
-        console.log(error);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while checking if the user exists.`));
-        return false;
-    });
+    const result = await helper.mariadb
+        .checkUserExistsInDB(message[1])
+        .catch((error) => {
+            console.log(error);
+            socket.send(
+                clientPublickey.encrypt(
+                    `LOGI;;ERR;;SERVER;;An error occurred while checking if the user exists.`,
+                ),
+            );
+            return false;
+        });
     if (!result) {
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;CLIENT;;The username or password is incorrect.`));
+        socket.send(
+            clientPublickey.encrypt(
+                `LOGI;;ERR;;CLIENT;;The username or password is incorrect.`,
+            ),
+        );
         return;
     }
 
     // Get salt from database
-    const salt = await helper.mariadb.getSaltFromDB(message[1]).catch((error) => {
-        console.log(error);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while getting the salt from the database.`));
-        return undefined;
-    });
+    const salt = await helper.mariadb
+        .getSaltFromDB(message[1])
+        .catch((error) => {
+            console.log(error);
+            socket.send(
+                clientPublickey.encrypt(
+                    `LOGI;;ERR;;SERVER;;An error occurred while getting the salt from the database.`,
+                ),
+            );
+            return undefined;
+        });
 
     // Base64 decode the username and password
-    const username = await new helper.crypto.base64(message[1]).decode().catch((error) => {
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the username.`));
-        return undefined;
-    });
-    const password = await new helper.crypto.base64(message[2]).decode().catch((error) => {
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while decoding the password.`));
-        return undefined;
-    });
+    const username = await new helper.crypto.base64(message[1])
+        .decode()
+        .catch((error) => {
+            socket.send(
+                clientPublickey.encrypt(
+                    `LOGI;;ERR;;SERVER;;An error occurred while decoding the username.`,
+                ),
+            );
+            return undefined;
+        });
+    const password = await new helper.crypto.base64(message[2])
+        .decode()
+        .catch((error) => {
+            socket.send(
+                clientPublickey.encrypt(
+                    `LOGI;;ERR;;SERVER;;An error occurred while decoding the password.`,
+                ),
+            );
+            return undefined;
+        });
 
-    if (salt === undefined || username === undefined || password === undefined) return;
+    if (salt === undefined || username === undefined || password === undefined)
+        return;
 
     // (Encode username) + (hash password + salt)
-    const password_compare = await helper.crypto.pbkdf2(password, salt).catch((error) => {
-        console.log(error);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while hashing the password.`));
-        return;
-    });
+    const password_compare = await helper.crypto
+        .pbkdf2(password, salt)
+        .catch((error) => {
+            console.log(error);
+            socket.send(
+                clientPublickey.encrypt(
+                    `LOGI;;ERR;;SERVER;;An error occurred while hashing the password.`,
+                ),
+            );
+            return;
+        });
 
     // Get username and password from database
-    const db_password = await helper.mariadb.getPasswdByUsernameFromDB(message[1]).catch((error) => {
-        console.log(error);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while getting the username and password from the database.`));
-        return;
-    });
+    const db_password = await helper.mariadb
+        .getPasswdByUsernameFromDB(message[1])
+        .catch((error) => {
+            console.log(error);
+            socket.send(
+                clientPublickey.encrypt(
+                    `LOGI;;ERR;;SERVER;;An error occurred while getting the username and password from the database.`,
+                ),
+            );
+            return;
+        });
 
     // Compare the username and password
     if (password_compare !== db_password) {
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;CLIENT;;The username or password is incorrect.`));
+        socket.send(
+            clientPublickey.encrypt(
+                `LOGI;;ERR;;CLIENT;;The username or password is incorrect.`,
+            ),
+        );
         return;
     }
 
     // Delete previous sessions
     try {
-        sessionsDB.prepare(`DELETE FROM sessions WHERE username='${message[1]}';`).run();
+        sessionsDB
+            .prepare(`DELETE FROM sessions WHERE username='${message[1]}';`)
+            .run();
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while deleted previous sessions.`));
+        socket.send(
+            clientPublickey.encrypt(
+                `LOGI;;ERR;;SERVER;;An error occurred while deleted previous sessions.`,
+            ),
+        );
         return;
     }
 
@@ -74,14 +129,22 @@ export const login = async (socket: any, message: string[], clientPublickey: for
 
     // Insert the session key into the database
     try {
-        sessionsDB.prepare("INSERT INTO sessions (ID, username, expires) VALUES (?, ?, ?)").run(session_key, message[1], expires);
+        sessionsDB
+            .prepare(
+                "INSERT INTO sessions (ID, username, expires) VALUES (?, ?, ?)",
+            )
+            .run(session_key, message[1], expires);
     } catch (err) {
         console.log(err);
-        socket.send(clientPublickey.encrypt(`LOGI;;ERR;;SERVER;;An error occurred while inserting the session key into the database.`));
+        socket.send(
+            clientPublickey.encrypt(
+                `LOGI;;ERR;;SERVER;;An error occurred while inserting the session key into the database.`,
+            ),
+        );
         return;
     }
 
     // Send the session key to the client
-    socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${session_key}`))
+    socket.send(clientPublickey.encrypt(`LOGI;;SUCCESS;;${session_key}`));
     return;
 };
