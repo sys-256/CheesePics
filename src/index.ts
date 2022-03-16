@@ -37,7 +37,7 @@ app.get("/", async (request, response) => {
     // Get a image entry from the database
     const image = await helper.mariadb.getRandomImage();
 
-    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 24) {
         // Check if the sessionID is valid
         const sessionID: string = request.cookies.sessionID;
         const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
@@ -78,7 +78,7 @@ app.get("/account", async (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 24) {
         // Check if the sessionID is valid
         const sessionID: string = request.cookies.sessionID;
         const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
@@ -102,7 +102,7 @@ app.get("/register", (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 24) {
         // Check if the sessionID is valid
         const sessionID: string = request.cookies.sessionID;
         const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
@@ -129,7 +129,7 @@ app.get("/login", (request, response) => {
         "X-Powered-By": "ur mom lmao"
     });
 
-    if (request.cookies.sessionID && request.cookies.sessionID.length === 12) {
+    if (request.cookies.sessionID && request.cookies.sessionID.length === 24) {
         // Check if the sessionID is valid
         const sessionID: string = request.cookies.sessionID;
         const dbResult: any[] = sessionsDB.prepare(`SELECT username, expires FROM sessions WHERE ID='${sessionID}'`).all();
