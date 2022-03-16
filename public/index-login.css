@@ -1,0 +1,96 @@
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css");
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&family=Poppins&display=swap');
+body {
+    background-color: #ffd983;
+    font-family: "Noto Sans", sans-serif;
+}
+
+nav {
+    background-color: #ffac33;
+    height: 5em;
+    border-radius: 15px;
+    margin-left: 3%;
+    margin-right: 3%;
+}
+
+.main {
+    display: grid;
+    justify-content: center;
+    text-align: center;
+}
+
+button {
+    font-family: "Noto Sans", sans-serif;
+}
+
+img.emoji {
+    height: 1em;
+    width: 1em;
+    margin: 0 .05em 0 .1em;
+    vertical-align: -0.1em;
+}
+
+img#cheese-img {
+    height: 30em;
+    width: auto;
+    position: absolute;
+    top:0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    
+    margin: auto;
+}
+
+.link-home {
+    font-size: 1.5em;
+}
+
+a:link,
+a:visited {
+    color: black;
+    text-decoration: none;
+}
+
+a:hover,
+a:active {
+    color: black;
+    text-decoration: underline;
+}
+
+
+/*
+ * https://stackoverflow.com/a/43448124/15708443
+*/
+
+div#particles-bg {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: -10;
+    top: 0;
+    left: 0
+}
+
+div#particles-bg canvas {
+    display: block;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    opacity: 1;
+    -webkit-transition: opacity .8s ease, -webkit-transform 1.4s ease;
+    transition: opacity .8s ease, transform 1.4s ease
+}
+
+#like-button {
+    padding: .2em .5em;
+    border: none;
+    font-size: larger;
+    color: black;
+    background-color: #ffac33;
+    border-radius: 25px;
+}
+
+#like-button:hover {
+    font-size: x-large;
+}
