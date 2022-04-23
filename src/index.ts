@@ -4,17 +4,23 @@ import { config } from "../config.js";
 // Import packages
 import Database from "better-sqlite3";
 const sessionsDB = new Database(config.sessions.url);
-import forge from "node-forge";
 import cookie_parser from "cookie-parser";
 
 import * as helper from "./helper.js";
 import { startWSServer } from "./websocket.js";
 
+import rateLimit from "express-rate-limit";
 import express from "express";
 const app = express();
 
 // Parse cookies
 app.use(cookie_parser());
+
+// Rate limiting - max 3 requests per second
+app.use(rateLimit({
+    windowMs: 1000,
+    max: 3
+}));
 
 app.use(
     express.static("public", {

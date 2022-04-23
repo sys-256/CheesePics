@@ -11,8 +11,5 @@ public/images/
 # Visual Studio Code
 .vscode/
 
-# SQLTools
-**/*.session.sql
-
 # Sessions database
 sessions.sqlite3
