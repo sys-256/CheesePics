@@ -6,21 +6,86 @@ body {
     font-family: "Noto Sans", sans-serif;
 }
 
-nav {
-    background-color: #ffac33;
-    height: 5em;
-    border-radius: 15px;
+.title {
+    font-size: larger;
+    margin-top: 10%;
+    margin-left: 12%;
+    position: fixed;
 
-    margin-left: 3%;
-    margin-right: 3%;
+    color: rgb(255, 255, 255);
+    visibility: visible;
+}
+
+.sex {
+    font-size: larger;
+    margin-top: 10%;
+    margin-left: 12%;
+    position: fixed;
+
+    color: rgb(255, 255, 255);
+    visibility: hidden;
+}
+
+.keeper {
+    width: 200px;
+    height: 5%;
+
+    margin-top: 10%;
+    margin-left: 12%;
+    position: fixed;
+}
+
+.title:hover {
+    visibility: hidden;
+}
+
+.title:hover + .sex {
+    visibility: visible;
+    margin-left: 10%;
 }
 
 button {
-    font-family: "Noto Sans", sans-serif;
+    background-color: rgb(255, 179, 0);
+    color: white;
+    border-radius: 20px;
+    border: none;
+
+    width: 100px;
+    height: 40px;
+
+
+    margin-top: 10%;
+    margin-left: -25.5%;
+    position: fixed;
+}
+
+.login {}
+.register {
+    margin-top: 13.5%
+}
+.cheese {
+    margin-top: 17%;
+}
+
+button:hover {
+    background-color: rgb(243, 198, 93);
+
+    width: 110px;
+
+    transition: background-color 0.1s, width 0.2s;
+}
+
+p {
+    background-color: rgb(255, 179, 0);
+    color: white;
+    border-radius: 20px;
+
+    position: relative;
+    margin-top: auto;
 }
 
 div.image-div {
-    /* center the div */
+    margin-left: 40%;
     display: grid;
     justify-content: center;
     text-align: center;
@@ -50,28 +115,6 @@ a:link, a:visited {
 }
 
 a:hover, a:active {
-    color: black;
+    color: rgb(154, 154, 154);
     text-decoration: underline;
-}
-
-/*
- * https://stackoverflow.com/a/43448124/15708443
-*/
-div#particles-bg {
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    z-index: -10;
-    top: 0;
-    left: 0
-}
-
-div#particles-bg canvas {
-    display: block;
-    -webkit-transform: scale(1);
-    -ms-transform: scale(1);
-    transform: scale(1);
-    opacity: 1;
-    -webkit-transition: opacity .8s ease, -webkit-transform 1.4s ease;
-    transition: opacity .8s ease, transform 1.4s ease
 }
