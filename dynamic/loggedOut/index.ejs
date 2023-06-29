@@ -9,10 +9,10 @@
     <meta name="referrer" content="no-referrer">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="128x128" href="../../public/favicon.png">
+    <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
 
     <!-- CSS -->
-    <link rel="stylesheet" href="../../public/index-logout.css">
+    <link rel="stylesheet" href="index-logout.css">
     <script crossorigin="anonymous" referrerpolicy="no-referrer"
         integrity="sha512-S/UB/AdGt16YP1OyopwfVG1BO93nkwVNY7No5zfALnztixutqOuP3DGvo7G4YqB77uL791jWNjQnT/63CjOZNw=="
         src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
@@ -21,7 +21,7 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 
     <!-- SEO -->
-<title>CheesePics</title>
+    <title>CheesePics</title>
     <meta name="description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
     <meta name="author" content="sys-256 (Bram)">
     <meta name="keywords" content="cheese, Cheese, CheesePics, cheesepics, CheesePics.xyz, cheesepics.xyz">
@@ -35,24 +35,22 @@
     <meta name="theme-color" content="#FFAC33">
 </head>
 
-
-
-
-
 <body>
+    <div id="particles-bg"></div>
+    <script>
+        particlesJS.load("particles-bg", "/particles.json");
+    </script>
     <nav>
         <h1>
-            <div class="title"><center>CheesePics</center></div>
-            <div class="sex"><center>fre chees nudes</center></div>
+            <a href="/" class="link-home">CheesePics</a>
             <div style="float: right; margin-right: 10px;">
+                <a href="/login"><i class="fa-solid fa-right-to-bracket"></i>&nbsp;Log in</a>&nbsp;&nbsp;
+                <a href="/register"><i class="fa-solid fa-user-plus"></i>&nbsp;Create account</a>
             </div>
         </h1>
     </nav>
-    <br><br><br>
+    <br><br>
     <div class="image-div">
-        <button class="button login">Login</button>
-        <button class="button register">Register</button>
-        <button class="button cheese">More Cheese</button>
         <img src="/images/cheese/<%= imageID %>" alt="Cheese" id="cheese-img"><br>
         <p>&copy; <%= author %> - <%= license %></p>
     </div>
