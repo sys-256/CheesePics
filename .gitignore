@@ -6,7 +6,7 @@ package-lock.json
 build/
 
 # Images
-public/images/
+public/images/**/*.jpg
 
 # Visual Studio Code
 .vscode/
