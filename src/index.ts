@@ -16,11 +16,13 @@ const app = express();
 // Parse cookies
 app.use(cookie_parser());
 
-// Rate limiting - max 3 requests per second
-app.use(rateLimit({
-    windowMs: 1000,
-    max: 3
-}));
+// Rate limiting - max 8 requests per second
+app.use(
+    rateLimit({
+        windowMs: 1000,
+        max: 8,
+    }),
+);
 
 app.use(
     express.static("public", {
@@ -57,17 +59,15 @@ app.get("/", async (request, response) => {
                 `SELECT username, expires FROM sessions WHERE ID='${sessionID}'`,
             )
             .all();
-        if (
-            dbResult.length === 0 ||
-            dbResult.length > 1 ||
-            dbResult[0].expires < Date.now()
-        ) {
+        if (dbResult.length !== 1 || dbResult[0].expires < Date.now()) {
             response.clearCookie("sessionID");
         } else {
             response.status(200).render("loggedIn/index.ejs", {
                 imageID: image.ID,
                 license: image.license,
                 author: image.author,
+                cookieMaxAge: config.cookies.maxAge,
+                contact: config.contact,
             });
             return;
         }

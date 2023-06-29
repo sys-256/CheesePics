@@ -2,63 +2,110 @@
 <html lang="en" translate="no">
 
 <head>
-    <!-- Browser standards -->
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="referrer" content="no-referrer">
+	<!-- Browser standards -->
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="referrer" content="no-referrer">
 
-    <!-- Favicon -->
-    <link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
+	<!-- Favicon -->
+	<link rel="icon" type="image/png" sizes="128x128" href="/favicon.png">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="index-login.css">
-    <script crossorigin="anonymous" referrerpolicy="no-referrer"
-        integrity="sha512-S/UB/AdGt16YP1OyopwfVG1BO93nkwVNY7No5zfALnztixutqOuP3DGvo7G4YqB77uL791jWNjQnT/63CjOZNw=="
-        src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
-    <script crossorigin="anonymous" referrerpolicy="no-referrer"
-        integrity="sha512-Kef5sc7gfTacR7TZKelcrRs15ipf7+t+n7Zh6mKNJbmW+/RRdCW9nwfLn4YX0s2nO6Kv5Y2ChqgIakaC6PW09A=="
-        src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+	<!-- CSS -->
+	<link rel="stylesheet" href="index-login.css">
+	<script crossorigin="anonymous" referrerpolicy="no-referrer"
+		integrity="sha512-S/UB/AdGt16YP1OyopwfVG1BO93nkwVNY7No5zfALnztixutqOuP3DGvo7G4YqB77uL791jWNjQnT/63CjOZNw=="
+		src="https://cdnjs.cloudflare.com/ajax/libs/forge/0.10.0/forge.min.js"></script>
+	<script crossorigin="anonymous" referrerpolicy="no-referrer"
+		integrity="sha512-Kef5sc7gfTacR7TZKelcrRs15ipf7+t+n7Zh6mKNJbmW+/RRdCW9nwfLn4YX0s2nO6Kv5Y2ChqgIakaC6PW09A=="
+		src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
 
-    <!-- SEO -->
-    <title>CheesePics</title>
-    <meta name="description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
-    <meta name="author" content="sys-256 (Bram)">
-    <meta name="keywords" content="cheese, Cheese, CheesePics, cheesepics, CheesePics.xyz, cheesepics.xyz">
-    <meta property="og:title" content="CheesePics">
-    <meta property="og:description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
-    <meta property="og:url" content="https://cheesepics.xyz">
-    <meta property="og:locale" content="en_US">
-    <meta property="og:image" content="/images/cheese/<%= imageID %>">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="CheesePics.xyz">
-    <meta name="theme-color" content="#FFAC33">
+	<!-- SEO -->
+	<title>CheesePics</title>
+	<meta name="description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
+	<meta name="author" content="sys-256 (Bram)">
+	<meta name="keywords" content="cheese, Cheese, CheesePics, cheesepics, CheesePics.xyz, cheesepics.xyz">
+	<meta property="og:title" content="CheesePics">
+	<meta property="og:description" content="clic link for fre chees nudes exploid in 202 !!111!!! (!)">
+	<meta property="og:url" content="https://cheesepics.xyz">
+	<meta property="og:locale" content="en_US">
+	<meta property="og:image" content="/images/cheese/<%= imageID %>">
+	<meta property="og:type" content="website">
+	<meta property="og:site_name" content="CheesePics.xyz">
+	<meta name="theme-color" content="#FFAC33">
 </head>
 
 <body>
-    <div id="particles-bg"></div>
-    <script>
-        particlesJS.load("particles-bg", "/particles.json");
-    </script>
-    <nav>
-        <h1>
-            <a href="/" class="link-home">CheesePics</a>
-            <div style="float: right; margin-right: 20px;">
-                <a href="/liked"><i class="fa-solid fa-heart"></i>&nbsp;Liked images</a>
-                <a href="/account"><i class="fa-solid fa-user"></i>&nbsp;My account</a>
-            </div>
-        </h1>
-    </nav>
-    <br><br>
-    <div class="main">
-        <div class="image-div">
-            <img src="/images/cheese/<%= imageID %>" alt="Cheese" id="cheese-img">
-            <button id="like-button"><i class="fa-solid fa-heart"></i></button>
-        </div>
-        <br>
-        <p>&copy; <%= author %> - <%= license %>
-        </p>
-    </div>
+	<div id="particles-bg"></div>
+	<nav>
+		<h1>
+			<a href="/" class="link-home">CheesePics</a>
+			<div style="float: right; margin-right: 20px;">
+				<a href="/liked"><i class="fa-solid fa-heart"></i>&nbsp;Liked images</a>
+				<a href="/account"><i class="fa-solid fa-user"></i>&nbsp;My account</a>
+			</div>
+		</h1>
+	</nav>
+	<br><br>
+	<div class="main">
+		<div class="image-div">
+			<img src="/images/cheese/<%= imageID %>" alt="Cheese" id="cheese-img">
+		</div>
+		<br>
+		<button id="like-button"><i class="fa-solid fa-heart"></i></button>
+		<br>
+		<p>&copy; <%= author %> - <%= license %>
+		</p>
+	</div>
+	<script>
+		// Load the particles
+		particlesJS.load("particles-bg", "/particles.json");
+
+		// Establish a connection with the server
+		const socket = new WebSocket("wss://cheesepics.sys-256.me/websocket");
+
+		let serverPublicKey;
+		const maxAge = parseInt("<%= cookieMaxAge %>");
+
+		const keypair = forge.pki.rsa.generateKeyPair({
+			"bits": 1024,
+			"workers": -1
+		});
+
+		socket.onmessage = async (event) => {
+			if (event.data.length !== 128) { // Is plain text
+				const message = event.data.split(";;");
+				if (message[0] === "PUBLICKEY") {
+					serverPublicKey = forge.pki.publicKeyFromPem(message[1]);
+				} else {
+					alert(`The server has sent an unknown message: ${message}`);
+				}
+			} else {
+				// Decrypt with keypair 
+				const message = keypair.privateKey.decrypt(event.data).split(";;");
+				if (message.length < 2 || message.length > 4 || message[0] !== "LOGI") {
+					alert("An MITM attack has been detected. Please contact <%= contact %> as soon as possible.");
+					return;
+				}
+				if (message[1] === "SUCCESS") {
+					const likeButton = document.querySelector(`#like-button`);
+					likeButton.innerHTML = `<i class="fa-solid fa-heart-crack"></i>`;
+				} else if (message[1] === "ERR") {
+					alert(`Failed to like the message, an error happened on the ${JSON.stringify(message[2]).toLowerCase()} side. Error: ${message[3]}`);
+
+				}
+				else {
+					alert(`The server has sent an unknown message: ${message}`);
+					return;
+				}
+			}
+		};
+
+		document.querySelector(`#like-button`).addEventListener("click", () => {
+			const imageID = "<%= imageID %>";
+			socket.send(`${forge.pki.publicKeyToPem(keypair.publicKey).replace(/(\r\n|\n|\r)/gm, "")}::${serverPublicKey.encrypt(`LIKE;;${imageID}`)}`);
+		});
+	</script>
 </body>
 
 </html>

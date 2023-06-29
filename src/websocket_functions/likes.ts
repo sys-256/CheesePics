@@ -48,7 +48,7 @@ export const like = async (
     // Base64 decode the username and password
     const username = await new helper.crypto.base64(message[1])
         .decode()
-        .catch((error) => {
+        .catch(() => {
             socket.send(
                 clientPublickey.encrypt(
                     `LIKE;;ERR;;SERVER;;An error occurred while decoding the username.`,
@@ -58,7 +58,7 @@ export const like = async (
         });
     const password = await new helper.crypto.base64(message[2])
         .decode()
-        .catch((error) => {
+        .catch(() => {
             socket.send(
                 clientPublickey.encrypt(
                     `LIKE;;ERR;;SERVER;;An error occurred while decoding the password.`,
@@ -133,12 +133,12 @@ export const like = async (
     if (check_like === undefined) return;
 
     if (check_like === true) {
-        socket.send(
+        /*socket.send(
             clientPublickey.encrypt(
                 `LIKE;;ERR;;CLIENT;;You have already liked this image.`,
             ),
-        );
-        return;
+        );*/
+        return unlike(socket, message, clientPublickey);
     }
 
     // Insert like into database

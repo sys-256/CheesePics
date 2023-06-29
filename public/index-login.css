@@ -31,15 +31,10 @@ img.emoji {
 }
 
 img#cheese-img {
-    height: 30em;
+    min-height: 5em;
+    max-height: 30em;
     width: auto;
-    position: absolute;
-    top:0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    
-    margin: auto;
+    max-width: 100%;
 }
 
 .link-home {
@@ -89,8 +84,10 @@ div#particles-bg canvas {
     color: black;
     background-color: #ffac33;
     border-radius: 25px;
+	width: min-content;
+	margin-left: 50%;
 }
 
 #like-button:hover {
-    font-size: x-large;
+    cursor: pointer;
 }
